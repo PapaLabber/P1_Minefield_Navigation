@@ -11,5 +11,6 @@ add_executable(project_main projekt_main.c
         map_processing/parse_map.c
         map_processing/process_map.c
         algorithm/run_algorithm.c
+        algorithm/min_heap.c
 
 )
