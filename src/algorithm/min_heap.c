@@ -41,6 +41,11 @@ typedef struct min_heap {
     int capacity;                // Max capacity of the heap
 } min_heap;
 
+// Prototyper
+min_heap* heapify(min_heap* heap, int index);
+
+
+
 
 // Hjælpe funktioner til at lave min_heap
 int parent(int index) {
@@ -96,5 +101,66 @@ min_heap* insert_minheap(min_heap* heap, int element) {
         heap->arr[current] = temp;
         current = parent(current);
     }
+    return heap;
+}
+
+
+min_heap* delete_minimum(min_heap* heap) {
+    // Delete minimum element, at the root
+    if (!heap || heap->size == 0) {
+        return heap;
+    }
+
+    int size = heap->size;
+    int last_element = heap->arr[size - 1];
+
+    // Update root element with last element
+    heap->arr[0] = last_element;
+
+    // Remove last element, by decreasing size
+    heap->size--;
+    size--;
+
+    // Call heapify function, to maintain the min-heap
+    // property
+    heap = heapify(heap, 0);
+    return heap;
+
+}
+
+min_heap* heapify(min_heap* heap, int index) {
+    // Rearrage heap to maintain minheap properties
+
+    if(heap->size <= 1) {
+        return heap;
+    }
+
+    int left = lchild(index);
+    int right = rchild(index);
+
+    // Variable to get smallest element in substree of an element in index
+    int smallest = index;
+
+    // If the left child is smaller than this element, it is the smallest
+    if (left < heap->size && heap->arr[left] < heap->arr[index]) {
+        smallest = left;
+    }
+
+    // If the child child is smaller than this element, it is the smallest
+    if (right < heap->size && heap->arr[right] < heap->arr[smallest]) {
+        smallest = right;
+    }
+
+    /* If the current element is not the smallest,
+    swap with the current element. The min_heap property
+    is now satisfied for this subtree. We recursively do this until we reach the root node,
+    which is the point at which there will be no change! */
+    if(smallest != index) {
+    int temp = heap->arr[index];
+    heap->arr[index] = heap->arr[smallest];
+    heap->arr[smallest] = temp;
+    heap = heapify(heap, smallest);
+    }
+
     return heap;
 }
