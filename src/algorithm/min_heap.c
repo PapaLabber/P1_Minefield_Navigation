@@ -69,11 +69,11 @@ int get_min (min_heap* heap) {
 }
 
 min_heap* initialise_min_heap(int capacity) {
-    min_heap* minheap = (min_heap*) calloc (1, sizeof(min_heap));
-    minheap->arr = (int*) calloc(capacity, sizeof(int));
-    minheap->size = 0;
-    minheap->capacity = capacity;
-    return minheap;
+    min_heap* heap = (min_heap*) calloc (1, sizeof(min_heap));
+    heap->arr = (node**) calloc(capacity, sizeof(node*));
+    heap->size = 0;
+    heap->capacity = capacity;
+    return heap;
 }
 
 void free_minheap(min_heap* heap) {
@@ -84,7 +84,7 @@ void free_minheap(min_heap* heap) {
     free(heap);
 }
 
-min_heap* insert_minheap(min_heap* heap, int element) {
+min_heap* insert_min_heap(min_heap* heap, node* element) {
     if(heap->size == heap->capacity) {
         fprintf("Heap is already full!\n", element); // mangler fil "fil,"
         return heap;
@@ -95,8 +95,8 @@ min_heap* insert_minheap(min_heap* heap, int element) {
     //Swap to get root
     int current = heap->size - 1;
 
-    while(current > 0 && heap->arr[parent(current)]) {
-        int temp = heap->arr[parent(current)];
+    while(current > 0 && heap->arr[parent(current)]->f_cost > heap->arr[current]->f_cost) {
+        node* temp = heap->arr[parent(current)];
         heap->arr[parent(current)] = heap->arr[current];
         heap->arr[current] = temp;
         current = parent(current);
@@ -105,29 +105,23 @@ min_heap* insert_minheap(min_heap* heap, int element) {
 }
 
 
-min_heap* delete_minimum(min_heap* heap) {
-    // Delete minimum element, at the root
+min_heap* find_minimum(min_heap* heap) {
+
+    // Find minimum element, at the root
     if (!heap || heap->size == 0) {
         return heap;
     }
-
-    int size = heap->size;
-    int last_element = heap->arr[size - 1];
-
-    // Update root element with last element
-    heap->arr[0] = last_element;
-
-    // Remove last element, by decreasing size
+    // Min is always at the root and move last element to the root
+    node* min_node = heap->arr[0];
+    heap->arr[0] = heap->arr[heap->size - 1];
     heap->size--;
-    size--;
 
-    // Call heapify function, to maintain the min-heap
-    // property
+    // Call heapify function, to maintain the min-heap property
     heap = heapify(heap, 0);
-    return heap;
-
+    return find_minimum;
 }
 
+// Priority que
 min_heap* heapify(min_heap* heap, int index) {
     // Rearrage heap to maintain minheap properties
 
@@ -142,21 +136,19 @@ min_heap* heapify(min_heap* heap, int index) {
     int smallest = index;
 
     // If the left child is smaller than this element, it is the smallest
-    if (left < heap->size && heap->arr[left] < heap->arr[index]) {
+    if (left < heap->size && heap->arr[left]->f_cost < heap->arr[smallest]->f_cost) {
         smallest = left;
     }
 
     // If the child child is smaller than this element, it is the smallest
-    if (right < heap->size && heap->arr[right] < heap->arr[smallest]) {
+    if (right < heap->size && heap->arr[right]->f_cost < heap->arr[smallest]->f_cost) {
         smallest = right;
     }
 
-    /* If the current element is not the smallest,
-    swap with the current element. The min_heap property
-    is now satisfied for this subtree. We recursively do this until we reach the root node,
-    which is the point at which there will be no change! */
+
+    // If root is not the smallest, swap and heapify recursively until we reach the smallest rode node
     if(smallest != index) {
-    int temp = heap->arr[index];
+    node* temp = heap->arr[index];
     heap->arr[index] = heap->arr[smallest];
     heap->arr[smallest] = temp;
     heap = heapify(heap, smallest);
