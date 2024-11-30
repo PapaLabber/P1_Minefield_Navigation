@@ -3,7 +3,7 @@
 #include <string.h>
 #include <math.h>
 #include <stdlib.h>
-
+#include <stdbool.h>
 
 
 typedef enum is_mine {
@@ -22,3 +22,5 @@ typedef enum is_obstacle {
     tripwire,
     deep_water
 } is_obstacle;
+
+

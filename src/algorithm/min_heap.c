@@ -3,6 +3,7 @@
 #include <string.h>
 #include <math.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 
 typedef enum is_mine {
@@ -45,7 +46,7 @@ typedef struct min_heap {
 min_heap* heapify(min_heap* heap, int index);
 
 
-
+/* min_heap til open list */
 
 // Hjælpe funktioner til at lave min_heap
 int parent(int index) {
