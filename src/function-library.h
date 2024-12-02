@@ -6,3 +6,4 @@
 void read_map_test();
 void parse_map_test();
 void process_map_test();
+int parse_map(int* rows, int* columns, int array);

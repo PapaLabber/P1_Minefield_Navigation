@@ -1,59 +1,43 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
-typedef struct {
-    int mine;
-    int height;
-    int obstacle;
-}cell_værdi;
 
-//mangler indlæsning af read_file data og returnering af output
 
-void random_cr(int* rows, int* coloumns); //prototype af funktion til randomize tal
-int try_parse_map(void) {
-    //Jeg håber at vi får data på rows og columns på sam
-    int rows;
-    int columns;
-    random_cr(&rows, &columns);
-    //allokore plads til matrixen
-    cell_værdi*** matrix = (cell_værdi***)malloc(rows * sizeof(cell_værdi**)); //allokere plads til rows
-    for(int i = 0; i < rows; i++) {
-        matrix[i] = (cell_værdi**)malloc(columns * sizeof(cell_værdi**)); //allokere plads til coloumns
-        for(int j = 0; j < columns; j++) {
-            matrix[i][j] = (cell_værdi*)malloc(sizeof(cell_værdi));
+int parse_map(int* rows, int* columns, int array) {
+    //allokere plads til matrixen
+    cell_værdi **matrix = (cell_værdi **) malloc(*rows * sizeof(cell_værdi *)); //allokere plads til rows
+     if(matrix == NULL) {
+        printf("Allokeringsfejl ved Matrix");
+        exit(EXIT_FAILURE);
+    }
+    for (int i = 0; i < *rows; i++) {
+        matrix[i] = (cell_værdi *) malloc(*columns * sizeof(cell_værdi)); //allokere plads til coloumns
+        if (matrix == NULL) {
+            printf("allokeringsfejl");
+            exit(EXIT_FAILURE);
         }
     }
-    //fylder matrixen med værdier
-    for(int i = 0; i < rows; i++) {
-        for(int j = 0; j < columns; j++) {
-            matrix[i][j]->mine = i * columns + j;
-            matrix[i][j]->height = i * columns + j * 2;
-            matrix[i][j]->obstacle = i * columns + j * 3;
+    //fylder matrixen med værdier fra read_map array
+    cell_værdi array[]; // den får jeg vel fra Thor right?
+    int k = 0;
+    int array_size = sizeof(array[10]) / sizeof(array[0]);
+    for (int i = 0; i < *rows && k < array_size; i++) {
+        for (int j = 0; j < *columns; j++) {
+            matrix[i][j] = array[k];
+            k++;
         }
     }
-
-    //Test print for sjov skyld
-    for(int i = 0; i < rows; i++) {
-        for(int j = 0; j < columns; j++) {
-            printf("(%4d, %4d, %4d)",matrix[i][j]->mine,matrix[i][j]->height, matrix[i][j]->obstacle);
+    //print for sjov skyld
+    /*for (int i = 0; i < *rows; i++) {
+        for (int j = 0; j < *columns; j++) {
+            printf("(%4d, %4d, %4d)", matrix[i][j].mine, matrix[i][j].height, matrix[i][j].obstacle);
         }
         printf("\n");
-    }
-
-
-    for(int i = 0; i < rows; i++) {
-        for(int j = 0; j < columns; j++) {
-            free(matrix[i][j]);
-        }
+    }*/
+    //This is needed at somepoint
+    for (int i = 0; i < *rows; i++) {
         free(matrix[i]);
     }
     free(matrix);
-    return matrix; // ikke færdigt
+    return 0;
 }
-//test
-void random_cr(int* rows, int* coloumns) {
 
-    srand(time(NULL));
-    *rows = rand() % 16 + 5 ;
-    *coloumns = rand() % 16 + 5;
-}
