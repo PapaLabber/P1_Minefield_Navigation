@@ -1,10 +1,9 @@
 #ifndef FUNCTION_LIBRARY_H
 #define FUNCTION_LIBRARY_H
-#endif //FUNCTION_LIBRARY_H
 
 // Debug kontrol
 #ifndef DEBUG
-#define DEBUG 1
+#define DEBUG 0
 #endif
 
 #if DEBUG
@@ -27,14 +26,7 @@ void process_map_test();
 Cell* read_map_from_file (const char* file, int* rows, int* columns, int* num_cells);
 
 
-
-
-
-
-
-
-
-
+#endif //FUNCTION_LIBRARY_H
 
 
 

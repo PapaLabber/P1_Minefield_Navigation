@@ -1,4 +1,4 @@
-#include <src/function-library.h>
+#include "../function-library.h"
 #include <stdio.h>
 #include <stdlib.h>
 
