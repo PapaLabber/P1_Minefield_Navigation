@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 /* Implementering af funktion som læser kort data fra fil og gemmer det i et array af structs */
-Cell* read_map_from_file (const char* file, int* rows, int* columns, int* num_cells) {
+cell* read_map_from_file (const char* file, int* rows, int* columns, int* num_cells) {
     /* Først åbnes filen i læse mode */
     FILE* local_file = fopen(file, "r");
 
@@ -23,7 +23,7 @@ Cell* read_map_from_file (const char* file, int* rows, int* columns, int* num_ce
     DEBUG_MSG("Debug - read_map: Number of cells calculated = %d\n", *num_cells);
 
     /* Allokering af hukommelse til cell array, som indeholder data fra kort */
-    Cell* cell_array = malloc(*num_cells * sizeof(Cell));
+    cell* cell_array = malloc(*num_cells * sizeof(cell));
 
     /* Kontrol om hukommelse til cell array kunne allokeres */
     if (cell_array == NULL) {
@@ -56,7 +56,7 @@ void read_map_test() {
     int rows, columns, num_cells;
 
     /* Kald af read_map_from_file funktionen */
-    Cell* cell_array = read_map_from_file("map.txt", &rows, &columns, &num_cells);
+    cell* cell_array = read_map_from_file("map.txt", &rows, &columns, &num_cells);
 
     /* Tjek af dimensioner og antal celler */
     printf("Test/read_map - Dimensions: rows = %d, columns = %d, num_cells = %d\n",
