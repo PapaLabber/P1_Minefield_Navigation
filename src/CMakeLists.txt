@@ -13,5 +13,6 @@ add_executable(project_main projekt_main.c
         algorithm/run_algorithm.c
         algorithm/min_heap.c
         algorithm/hash_table.c
+        algorithm/handling_sets.c
 
 )

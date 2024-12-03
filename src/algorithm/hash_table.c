@@ -5,10 +5,6 @@
 #include <stdbool.h>
 
 
-#define dummygrid_width 10
-#define dummygrid_height 10
-
-
 typedef enum is_mine {
     no_mine,
     MRUD,
@@ -39,50 +35,68 @@ typedef struct node {
     int blast_radius;            // Ekstra felt til at angive risiko-niveau (f.eks. miner: højere værdi)
 } node;
 
-node* hash_table[dummygrid_width][dummygrid_height];
+typedef struct hash_table_entry {
+    node* head;
+} hash_table_entry;
 
-// Statisk
-bool init_hash_table() {
+typedef struct hash_table {
+    hash_table_entry* entries;
+    int size;
+} hash_table;
 
-    for (int x = 0; x < dummygrid_width; x++) {
-        for (int y = 0; y < dummygrid_height; y++) {
-            hash_table[x][y] = NULL;
-        }
+// Initialising hash_table
+hash_table* init_hash_table(int size) {
+
+    hash_table* ht = malloc(sizeof(hash_table)); // Dynamic allocating memory for room for the table
+    if(ht == 0) {
+        printf("Out of memory.\n");
+        exit(EXIT_FAILURE);
     }
-    // table is empty
+    ht->entries = calloc(size, sizeof(hash_table_entry)); // Allocating memory with calloc for entries and sets to NULL
+    ht->size = size;
+    return ht;
 }
 
-unsigned int hash_function(int x, int y) {
-    return (x % dummygrid_width + y % dummygrid_height) % dummygrid_width;
+// Size of the grid and hash_function
+unsigned int hash_function(int x, int y, int width) {
+    return y * width + x;
 }
 
-void insert_node(int x, int y, int cost) {
-    node* new_node = malloc(sizeof(node));
+// Inserting a new node in the hashtable and calculating hashvalue to place node in hash_table_entry
+void insert_node(int x, int y, int width, int cost, hash_table* ht) {
+    node* new_node = malloc(sizeof(node)); // Dynamic allocating memory for new_node
+    if (new_node == NULL) {
+        printf("Out of memory.\n");
+        exit(EXIT_FAILURE);
+    }
+
     new_node->x = x;
     new_node->y = y;
     new_node->g_cost = cost;
     new_node->next = NULL;
 
-    // Beregn hashværdi
-    int hash_x = x % dummygrid_width;
-    int hash_y = y % dummygrid_height;
+    // Calculating hash value
+    int hash = hash_function(x, y, width) % ht->size;
 
-    if (hash_table[hash_x][hash_y] == NULL) {
-        hash_table[hash_x][hash_y] = new_node;
+    // Find correct bucket
+    node* current = ht->entries[hash].head;
+
+    // Separate chaining
+    if (current == NULL) {
+        ht->entries[hash].head = new_node;
     } else {
-        node* current = hash_table[hash_x][hash_y];
         while (current->next != NULL) {
             current = current->next;
         }
         current->next = new_node;
     }
 }
+// Searching for node in the hash_table from (x,y) coordinates
+node* find_node(int x, int y, int width, hash_table* ht) {
 
-node* find_node(int x, int y) {
-    int hash_x = x % dummygrid_width;
-    int hash_y = y % dummygrid_height;
+    int hash = hash_function(x, y, width) % ht->size;
 
-    node* current = hash_table[hash_x][hash_y];
+    node* current = ht->entries[hash].head;
     while (current != NULL) {
         if (current->x == x && current->y == y) {
             return current;

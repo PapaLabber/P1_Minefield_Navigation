@@ -42,7 +42,7 @@ typedef struct min_heap {
     int capacity;                // Max capacity of the heap
 } min_heap;
 
-// Prototyper
+// Prototype
 min_heap* heapify(min_heap* heap, int index);
 
 
@@ -125,7 +125,6 @@ min_heap* find_minimum(min_heap* heap) {
 // Priority que
 min_heap* heapify(min_heap* heap, int index) {
     // Rearrage heap to maintain minheap properties
-
     if(heap->size <= 1) {
         return heap;
     }
