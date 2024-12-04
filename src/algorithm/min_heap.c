@@ -42,13 +42,10 @@ typedef struct min_heap {
     int capacity;                // Max capacity of the heap
 } min_heap;
 
-// Prototyper
+// Prototype
 min_heap* heapify(min_heap* heap, int index);
 
-
-/* min_heap til open list */
-
-// Hjælpe funktioner til at lave min_heap
+// Help funktions for min_heap
 int parent(int index) {
     //index of parent node
     return (index - 1) / 2;
@@ -69,6 +66,8 @@ int get_min (min_heap* heap) {
     return heap->arr[0];
 }
 
+
+// Initialising min heap structure and returns pointer to the min_heap (heap)
 min_heap* initialise_min_heap(int capacity) {
     min_heap* heap = (min_heap*) calloc (1, sizeof(min_heap));
     heap->arr = (node**) calloc(capacity, sizeof(node*));
@@ -77,7 +76,8 @@ min_heap* initialise_min_heap(int capacity) {
     return heap;
 }
 
-void free_minheap(min_heap* heap) {
+// Function that we can call in main when we need to free the memory form min_heap
+void free_min_heap(min_heap* heap) {
     if(heap == NULL) {
         return;
     }
@@ -85,6 +85,7 @@ void free_minheap(min_heap* heap) {
     free(heap);
 }
 
+// min_heap inserts a new element to the min_heap
 min_heap* insert_min_heap(min_heap* heap, node* element) {
     if(heap->size == heap->capacity) {
         fprintf("Heap is already full!\n", element); // mangler fil "fil,"
@@ -125,7 +126,6 @@ min_heap* find_minimum(min_heap* heap) {
 // Priority que
 min_heap* heapify(min_heap* heap, int index) {
     // Rearrage heap to maintain minheap properties
-
     if(heap->size <= 1) {
         return heap;
     }
