@@ -135,6 +135,8 @@ void aStarSearch(int grid[GRID_ROW][GRID_COL], Pair start, Pair dest) {
     free(openList.array);
 }
 
+// kommentar sp jeg kan push
+
 int main() {
     int grid[GRID_ROW][GRID_COL] = {
         {1, 0, 1, 1, 1, 1, 0, 1, 1},
