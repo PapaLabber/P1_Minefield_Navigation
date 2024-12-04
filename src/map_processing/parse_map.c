@@ -35,7 +35,7 @@ cell** parse_map(const int rows, const int columns, const cell* read_map_array, 
     //print for sjov skyld
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < columns; j++) {
-            printf("(%4d, %4d, %4d)", matrix[i][j].obstacle, matrix[i][j].terrain, matrix[i][j].mine);
+            printf("(%d, %2d, %2d)  ", matrix[i][j].obstacle, matrix[i][j].terrain, matrix[i][j].mine);
         }
         printf("\n");
     }
