@@ -1,8 +1,31 @@
 #ifndef FUNCTION_LIBRARY_H
 #define FUNCTION_LIBRARY_H
 
+// Debug kontrol
+#ifndef DEBUG
+#define DEBUG 1
+#endif
+
+#if DEBUG
+    #define DEBUG_MSG(fmt, ...) printf(fmt, ##__VA_ARGS__)
+#else
+    #define DEBUG_MSG(fmt, ...)
+#endif
+
+// Struct definition
+typedef struct {
+    int obstacle;
+    int terrain;
+    int mine;
+} cell;
+
+// Funktion prototyper
+cell* read_map_from_file (const char* file, int* rows, int* columns, int* num_cells);
+cell** parse_map(const int rows, const int columns, const cell* read_map_array, const int num_cells);
+
+
 #endif //FUNCTION_LIBRARY_H
 
-void read_map_test();
-void parse_map_test();
-void process_map_test();
+
+
+

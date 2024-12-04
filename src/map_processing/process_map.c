@@ -9,7 +9,6 @@
 // Update map elements if necessary.
 // Outputs the processed map.
 
-
 #include <stdio.h>
 
 void process_map_test() {
