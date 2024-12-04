@@ -7,3 +7,6 @@ include_directories(${CMAKE_SOURCE_DIR}/src)
 
 add_subdirectory(src)
 enable_testing()
+add_executable(create_map
+        src/map_creation/create_map.c
+        src/map_creation/create_file.c)
