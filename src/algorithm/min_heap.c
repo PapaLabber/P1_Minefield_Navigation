@@ -61,8 +61,13 @@ int rchild(int index) {
     return 2 * index + 2;
 }
 
+
 int get_min (min_heap* heap) {
-    // Return root node, since it is min
+    // Makes sure that we return root node, since it is min
+    if (!heap || heap->size == 0) {
+        printf("min_heap is NULL or empty\n");
+        exit(EXIT_FAILURE);
+    }
     return heap->arr[0];
 }
 
@@ -76,7 +81,7 @@ min_heap* initialise_min_heap(int capacity) {
     return heap;
 }
 
-// Function that we can call in main when we need to free the memory form min_heap
+// Function to be called in main when we need to free the memory form min_heap
 void free_min_heap(min_heap* heap) {
     if(heap == NULL) {
         return;
@@ -88,7 +93,7 @@ void free_min_heap(min_heap* heap) {
 // min_heap inserts a new element to the min_heap
 min_heap* insert_min_heap(min_heap* heap, node* element) {
     if(heap->size == heap->capacity) {
-        fprintf("Heap is already full!\n", element); // mangler fil "fil,"
+        printf("Heap is already full!\n", element); // mangler fil "fil,"
         return heap;
     }
     heap->size++;
@@ -106,7 +111,7 @@ min_heap* insert_min_heap(min_heap* heap, node* element) {
     return heap;
 }
 
-
+// Finds and return the minimum in the data structure, because we have to find the minimum everytime we want to move, to get the best path
 min_heap* find_minimum(min_heap* heap) {
 
     // Find minimum element, at the root
@@ -114,16 +119,16 @@ min_heap* find_minimum(min_heap* heap) {
         return heap;
     }
     // Min is always at the root and move last element to the root
-    node* min_node = heap->arr[0];
+    node* min_node = get_min(heap);
     heap->arr[0] = heap->arr[heap->size - 1];
     heap->size--;
 
-    // Call heapify function, to maintain the min-heap property
+    // Call heapify function, to keep min-heap feature
     heap = heapify(heap, 0);
     return find_minimum;
 }
 
-// Priority que
+
 min_heap* heapify(min_heap* heap, int index) {
     // Rearrage heap to maintain minheap properties
     if(heap->size <= 1) {
