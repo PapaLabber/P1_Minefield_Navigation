@@ -6,10 +6,11 @@ int main(void) {
 
     int rows, columns, num_cells;
 
+    create_file();
+
     cell* read_map_array = read_map_from_file("map.txt", &rows, &columns, &num_cells);
 
     cell **matrix = parse_map(rows, columns, read_map_array, num_cells);
-
 
 
     //This is needed at somepoint

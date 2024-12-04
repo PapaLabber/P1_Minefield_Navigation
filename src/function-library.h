@@ -24,6 +24,10 @@ cell* read_map_from_file (const char* file, int* rows, int* columns, int* num_ce
 cell** parse_map(const int rows, const int columns, const cell* read_map_array, const int num_cells);
 
 
+// Extra prototyper
+void create_file();
+
+
 #endif //FUNCTION_LIBRARY_H
 
 
