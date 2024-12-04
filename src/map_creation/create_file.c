@@ -8,6 +8,11 @@ void create_file() {
     // Seed random number generator
     srand((unsigned int)time(NULL));
 
+    // Prompt for dimensions of the map
+    int rows, columns;
+    printf("What dimensions would you like the map to be?: \n");
+    scanf("%d %d", &rows, &columns);
+
     // File pointer
     FILE *file = fopen("map.txt", "w");
     if (!file) {
@@ -16,9 +21,13 @@ void create_file() {
     }
     DEBUG_MSG("Debug - map_creation: map opened \n");
 
-    // Random number of data points (e.g., between 10 and 100)
-    int num_data_points = rand() % 51 + 10; // 10 to 100
+    // Number of data points dependent on dimensions of map
+    int num_data_points = rows * columns;
     DEBUG_MSG("Debug - map_creation: num_data_points = %d \n", num_data_points);
+
+    // Printing of dimensions as first 2 numbers in map.txt
+    fprintf(file, "%d %d ", rows, columns);
+    DEBUG_MSG("Debug - map_creation: dimensions successfully written to map file\n");
 
     // Initialize the first value for x2
     int x2 = rand() % 31 - 15; // Random value between -15 and 15
@@ -41,6 +50,7 @@ void create_file() {
     }
     // Close the file
     fclose(file);
+    DEBUG_MSG("Debug - map_creation: File closed successfully\n");
 
     printf("Data points successfully written to data.txt.\n");
 }
