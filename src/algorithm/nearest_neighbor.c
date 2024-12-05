@@ -66,7 +66,7 @@ void planRoutes(Point start, Point mines[], int numMines) {
     findPath(current, start);
 }
 
-int main() {
+void nearest_neighbor_test(void) {
     // Eksempeldata
     Point start = {0, 0}; // Startkoordinater
     Point mines[] = {{2, 3}, {5, 4}, {8, 1}}; // Minerkoordinater
@@ -74,6 +74,4 @@ int main() {
 
     // Kør programmet
     planRoutes(start, mines, numMines);
-
-    return 0;
 }

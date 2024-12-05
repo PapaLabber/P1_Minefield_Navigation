@@ -22,7 +22,7 @@ int rchild(int index) {
     return 2 * index + 2;
 }
 
-int get_min (min_heap* heap) {
+node* get_min (min_heap* heap) {
     // Makes sure that we return root node, since it is min
     if (!heap || heap->size == 0) {
         printf("min_heap is NULL or empty\n");
@@ -30,6 +30,7 @@ int get_min (min_heap* heap) {
     }
     return heap->arr[0];
 }
+
 
 // Initialising min heap structure and returns pointer to the min_heap (heap)
 min_heap* initialise_min_heap(int capacity) {
@@ -70,21 +71,22 @@ min_heap* insert_min_heap(min_heap* heap, node* element) {
     return heap;
 }
 
-// Finds and return the minimum in the data structure, because we have to find the minimum everytime we want to move, to get the best path
-min_heap* find_minimum(min_heap* heap) {
+// Finds and return the minimum in the data structure, because we have to find the minimum everytime we want to move,
+// to get the best path
+node* find_minimum(min_heap* heap) {
 
     // Find minimum element, at the root
     if (!heap || heap->size == 0) {
         return heap;
     }
-    // Min is always at the root and move last element to the root
+    // Min is always at the root and moves last element to the root
     node* min_node = get_min(heap);
     heap->arr[0] = heap->arr[heap->size - 1];
     heap->size--;
 
     // Call heapify function, to keep min-heap feature
     heap = heapify(heap, 0);
-    return find_minimum;
+    return min_node;
 }
 
 min_heap* heapify(min_heap* heap, int index) {

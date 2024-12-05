@@ -2,38 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdint.h>
-#include <stdbool.h>
-
-
-typedef enum is_mine {
-    no_mine,
-    MRUD,
-    PMA2,
-    PMA3,
-    PROM1
-} is_mine;
-
-typedef enum is_obstacle {
-    no_obstacle,
-    tree,
-    stone,
-    bush,
-    tripwire,
-    deep_water
-} is_obstacle;
-
-typedef struct node {
-    int x, y;                    // Koordinater
-    int g_cost;                  // Omkostning fra startnoden til denne node
-    int h_cost;                  // Omkostningen fra denne node til mål
-    int f_cost;                  // Summen af g_cost og h_cost (f_cost = g_cost + h_cost)
-    struct node* parent;         // Pointer til forælder-node for sti-rekonstruktion
-    is_obstacle obstacle_type;   // Obstacle type / Ingen obstacle == 0
-    is_mine mine_type;           // Minetype / Ingen mine == 0
-    struct node* next;           // Til håndtering af kollisioner (chaining)
-    // int elevation;            // Højden for en given celle
-    int blast_radius;            // Ekstra felt til at angive risiko-niveau (f.eks. miner: højere værdi)
-} node;
+#include "../function-library.h"
 
 typedef struct hash_table_entry {
     node* head;
@@ -70,8 +39,8 @@ void insert_node(int x, int y, int width, int cost, hash_table* ht) {
         exit(EXIT_FAILURE);
     }
 
-    new_node->x = x;
-    new_node->y = y;
+    new_node->col = x;
+    new_node->row = y;
     new_node->g_cost = cost;
     new_node->next = NULL;
 
@@ -98,7 +67,7 @@ node* find_node(int x, int y, int width, hash_table* ht) {
 
     node* current = ht->entries[hash].head;
     while (current != NULL) {
-        if (current->x == x && current->y == y) {
+        if (current->col == x && current->row == y) {
             return current;
         }
         current = current->next;
