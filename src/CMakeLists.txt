@@ -15,5 +15,6 @@ add_executable(project_main projekt_main.c
         algorithm/hash_table.c
         algorithm/handling_sets.c
         algorithm/trace_path.c
+        algorithm/nearest_neighbor.c
 
 )
