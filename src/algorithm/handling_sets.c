@@ -39,14 +39,19 @@ void add_to_closed_set(hash_table* closed_list, node* node_to_add) {
 
 /*
 ### 3. **Write a Hash Function** */
-    hash_function(closed_list->entries->head->col, closed_list->entries->head->row, )
 
     int hash_col = node_to_add->col % GRID_COL;
     int hash_row = node_to_add->row % GRID_ROW;
 
 /*
 ### 4. **Insert Data into the Hash Table***/
+    unsigned int hash_table_index = hash_function(node_to_add->col, node_to_add->row, GRID_COL);
 
+    node* current = closed_list->entries[hash_table_index].head;
+
+    // Collision handling: ikke sikker på det virker
+    node_to_add->next = (struct node*)current;
+    closed_list->entries[hash_table_index].head = node_to_add;
 /*
 ### 5. **Search for Data**
 ### 6. **Delete Data**
