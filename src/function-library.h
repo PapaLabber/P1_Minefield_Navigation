@@ -10,22 +10,22 @@ void read_map_test();
 void parse_map_test();
 void process_map_test();
 
-typedef enum is_mine {
+typedef enum mine {
     no_mine,
     MRUD,
     PMA2,
     PMA3,
     PROM1
-} is_mine;
+} mine;
 
-typedef enum is_obstacle {
+typedef enum obstacle {
     no_obstacle,
     tree,
     stone,
     bush,
     tripwire,
     deep_water
-} is_obstacle;
+} obstacle;
 
 typedef struct {
     int col, row;
@@ -38,8 +38,8 @@ typedef struct {
     int f_cost;                  // sum of g_cost h_cost
     node_parent parent;          // Pointer til forælder-node for sti-rekonstruktion
     struct node* next;
-    is_obstacle obstacle_type;   // obstacle type ---- no obstacle == 0
-    is_mine mine_type;           // mine type ---- no mine == 0
+    obstacle obstacle_type;   // obstacle type ---- no obstacle == 0
+    mine mine_type;           // mine type ---- no mine == 0
     // int elevation;            // height of node ---- nice to have
     int blast_radius;            // Ekstra felt til at angive risiko-niveau (f.eks. miner: højere værdi)
 } node;
@@ -49,6 +49,15 @@ typedef struct min_heap {
     int size;                    // Current size of heap
     int capacity;                // Max capacity of the heap
 } min_heap;
+
+typedef struct hash_table_entry {
+    node* head;
+} hash_table_entry;
+
+typedef struct hash_table {
+    hash_table_entry* entries;
+    int size;
+} hash_table;
 
 int parent(int index);
 
@@ -71,3 +80,16 @@ min_heap* heapify(min_heap* heap, int index);
 void trace_path(node node_details[GRID_ROW][GRID_COL], node destination);
 
 void a_star_test(void);
+
+hash_table* init_hash_table(int size);
+
+void add_to_open_set(min_heap* pq, node* node_to_add);
+
+node* get_and_remove_lowest_node(min_heap* pq);
+
+void add_to_closed_set(node* hash_table[][GRID_ROW], node* node_to_add);
+
+int is_node_in_closed_set(node* hash_table[][GRID_ROW], node* node_to_check);
+
+unsigned int hash_function(int x, int y, int width);
+

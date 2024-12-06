@@ -3,7 +3,6 @@
 #include <math.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include <float.h>
 #include "../function-library.h"
 
 // is node within grid boundaries? (compares node coords with grid dimensions)
@@ -12,8 +11,8 @@ bool is_valid(node current_node) {
 }
 
 // is node unblocked? (checks node value)
-bool is_unblocked(int grid[GRID_COL][GRID_ROW], node current_node) {
-    return (grid[current_node.col][current_node.row] == 1);
+bool is_unblocked(node current_node) {
+    return (current_node.obstacle_type == no_obstacle);
 }
 
 // has destination been reached? (compare coordinates)
@@ -27,7 +26,7 @@ int calculate_heuristic(node current_node, node destination) {
 }
 
 // the actual A* algorithm (mine A to mine B traversal)
-void a_star_search(int grid[GRID_COL][GRID_ROW], node start, node destination) { // Pair -> node
+void a_star_search(node* grid[GRID_COL][GRID_ROW], node start, node destination) { // Pair -> node
     // validating start and destination nodes
     // are both start and destination valid?
     if (!is_valid(start) == 1) {
@@ -39,10 +38,10 @@ void a_star_search(int grid[GRID_COL][GRID_ROW], node start, node destination) {
     }
 
     // are both start and destination unblocked?
-    if (!is_unblocked(grid, start)) {
+    if (!is_unblocked(start)) {
         printf("ERROR: Start node is blocked.");
         exit(EXIT_FAILURE);
-    } else if (!is_unblocked(grid, destination)) {
+    } else if (!is_unblocked(destination)) {
         printf("ERROR: Destination node is blocked.");
         exit(EXIT_FAILURE);
     }
@@ -53,9 +52,25 @@ void a_star_search(int grid[GRID_COL][GRID_ROW], node start, node destination) {
         exit(EXIT_FAILURE);
     }
 
-    // closed list, all elements initially unvisited (closed)
+    // initializing closed list, all elements initially unvisited (closed)
+    /*
     bool closed_list[GRID_COL][GRID_ROW];
     memset(closed_list, false, sizeof(closed_list));
+    */
+
+    hash_table* closed_list = init_hash_table(GRID_COL * GRID_ROW);
+
+    // filling closed list (maybe done in post-processing)
+
+    for (int i = 0; i < GRID_COL; i++) {
+        for (int j = 0; j < GRID_ROW; j++) {
+            if (grid[i][j]->obstacle_type == tree) {
+                add_to_closed_set(closed_list, grid[i][j]);
+            }
+        }
+    }
+
+
 
     // Initialization of grid and setting cost to max. Parents initialized
     node node_details[GRID_COL][GRID_ROW];
@@ -71,9 +86,9 @@ void a_star_search(int grid[GRID_COL][GRID_ROW], node start, node destination) {
 
     // initialize start node
     int i = start.row, j = start.col;
-    node_details[i][j].f_cost = 0;
+    node_details[i][j].f_cost = 0; // Sættes til at være distancens mellem start og slut
     node_details[i][j].g_cost = 0;
-    node_details[i][j].h_cost = 0;
+    node_details[i][j].h_cost = 0; // Sættes til at være distancens mellem start og slut
     node_details[i][j].parent.col = i; // no parent assigned yet
     node_details[i][j].parent.row = j;
 
@@ -115,7 +130,7 @@ void a_star_search(int grid[GRID_COL][GRID_ROW], node start, node destination) {
                     found_dest = true;
                     free(open_list.arr); // skal closed list ikke også free'es?
                     return;
-                } else if (!closed_list[child.col][child.row] && is_unblocked(grid, child)) {
+                } else if (!closed_list[child.col][child.row] && is_unblocked(child)) {
                     g_cost_new = node_details[i][j].g_cost + move_costs[d];
                     h_cost_new = calculate_heuristic(child, destination);
                     f_cost_new = g_cost_new + h_cost_new;
@@ -158,10 +173,24 @@ void a_star_test(void) {
         {1, 1, 1, 1, 1, 1, 1, 0, 1}
     };
 
+    node* grid_with_obstacles[GRID_COL][GRID_ROW];
+
+    for (int i = 0; i < GRID_COL; i++) {
+        for (int j = 0; j < GRID_ROW; j++) {
+            grid_with_obstacles[i][j]->col = i;
+            grid_with_obstacles[i][j]->row = j;
+            if (grid[i][j] == 0) {
+                grid_with_obstacles[i][j]->obstacle_type = tree;
+            } else if (grid[i][j] == 1) {
+                grid_with_obstacles[i][j]->obstacle_type = no_obstacle;
+            }
+        }
+    }
+
     node start = {0, 0};
     node destination = {8, 8};
 
-    a_star_search(grid, start, destination);
+    a_star_search(grid_with_obstacles, start, destination);
 
     printf("run_algorithm.c works");
 }

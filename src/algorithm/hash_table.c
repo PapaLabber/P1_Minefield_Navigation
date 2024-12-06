@@ -4,21 +4,12 @@
 #include <stdint.h>
 #include "../function-library.h"
 
-typedef struct hash_table_entry {
-    node* head;
-} hash_table_entry;
-
-typedef struct hash_table {
-    hash_table_entry* entries;
-    int size;
-} hash_table;
-
 // Initialising hash_table
 hash_table* init_hash_table(int size) {
 
     hash_table* ht = malloc(sizeof(hash_table)); // Dynamic allocating memory for room for the table
-    if(ht == 0) {
-        printf("Out of memory.\n");
+    if(ht == NULL) {
+        printf("ERROR: Out of memory.\n");
         exit(EXIT_FAILURE);
     }
     ht->entries = calloc(size, sizeof(hash_table_entry)); // Allocating memory with calloc for entries and sets to NULL
@@ -35,7 +26,7 @@ unsigned int hash_function(int x, int y, int width) {
 void insert_node(int x, int y, int width, int cost, hash_table* ht) {
     node* new_node = malloc(sizeof(node)); // Dynamic allocating memory for new_node
     if (new_node == NULL) {
-        printf("Out of memory.\n");
+        printf("ERROR: Out of memory.\n");
         exit(EXIT_FAILURE);
     }
 

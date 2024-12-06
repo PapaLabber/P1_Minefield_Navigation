@@ -31,21 +31,39 @@ node* get_and_remove_lowest_node(min_heap* pq) {
 }
 
 // Add note to the closed set (obstacles)
-void add_to_closed_set(node* hash_table[][GRID_ROW], node* node_to_add) {
-    if(hash_table == NULL || node_to_add == NULL) {
+void add_to_closed_set(hash_table* closed_list, node* node_to_add) {
+    if(closed_list == NULL || node_to_add == NULL) {
         printf("ERROR: Hash table is full or node is invalid.\n");
         return;
     }
 
+/*
+### 3. **Write a Hash Function** */
+    hash_function(closed_list->entries->head->col, closed_list->entries->head->row, )
+
     int hash_col = node_to_add->col % GRID_COL;
     int hash_row = node_to_add->row % GRID_ROW;
 
-    if(hash_table[hash_col][hash_row] == NULL) {
-        hash_table[hash_col][hash_row] = node_to_add;
+/*
+### 4. **Insert Data into the Hash Table***/
+
+/*
+### 5. **Search for Data**
+### 6. **Delete Data**
+### 7. **Resize the Hash Table (Optional)**
+### 8. **Test the Hash Table**
+### 9. **Handle Errors and Memory Management**
+### 10. **Integrate the Hash Table**
+*/
+
+
+
+    if(closed_list->entries->head->col == 0 && closed_list->entries->head->row == 0) {
+        closed_list->entries->head = node_to_add;
         node_to_add->next = NULL;
     } else {
-        node_to_add->next = hash_table[hash_col][hash_row];
-        hash_table[hash_col][hash_row] = node_to_add;
+        node_to_add->next = closed_list[hash_col][hash_row];
+        closed_list[hash_col][hash_row] = node_to_add;
     }
 }
 
