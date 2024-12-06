@@ -52,8 +52,6 @@ typedef struct min_heap {
 
 int parent(int index);
 
-int parent(int index);
-
 int lchild(int index);
 
 int rchild(int index);

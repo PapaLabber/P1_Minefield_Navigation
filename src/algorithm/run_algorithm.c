@@ -12,8 +12,8 @@ bool is_valid(node current_node) {
 }
 
 // is node unblocked? (checks node value)
-bool is_unblocked(int grid[GRID_ROW][GRID_COL], node current_node) {
-    return (grid[current_node.row][current_node.col] == 1);
+bool is_unblocked(int grid[GRID_COL][GRID_ROW], node current_node) {
+    return (grid[current_node.col][current_node.row] == 1);
 }
 
 // has destination been reached? (compare coordinates)
@@ -27,7 +27,7 @@ int calculate_heuristic(node current_node, node destination) {
 }
 
 // the actual A* algorithm (mine A to mine B traversal)
-void a_star_search(int grid[GRID_ROW][GRID_COL], node start, node destination) { // Pair -> node
+void a_star_search(int grid[GRID_COL][GRID_ROW], node start, node destination) { // Pair -> node
     // validating start and destination nodes
     // are both start and destination valid?
     if (!is_valid(start) == 1) {
@@ -54,11 +54,11 @@ void a_star_search(int grid[GRID_ROW][GRID_COL], node start, node destination) {
     }
 
     // closed list, all elements initially unvisited (closed)
-    bool closed_list[GRID_ROW][GRID_COL];
+    bool closed_list[GRID_COL][GRID_ROW];
     memset(closed_list, false, sizeof(closed_list));
 
     // Initialization of grid and setting cost to max. Parents initialized
-    node node_details[GRID_ROW][GRID_COL];
+    node node_details[GRID_COL][GRID_ROW];
     for (int i = 0; i < GRID_ROW; i++) {
         for (int j = 0; j < GRID_COL; j++) {
             node_details[i][j].f_cost = INT_MAX; // initial cost infinite, not looked at yet
@@ -71,9 +71,9 @@ void a_star_search(int grid[GRID_ROW][GRID_COL], node start, node destination) {
 
     // initialize start node
     int i = start.row, j = start.col;
-    node_details[i][j].f_cost = 0.0;
-    node_details[i][j].g_cost = 0.0;
-    node_details[i][j].h_cost = 0.0;
+    node_details[i][j].f_cost = 0;
+    node_details[i][j].g_cost = 0;
+    node_details[i][j].h_cost = 0;
     node_details[i][j].parent.col = i; // no parent assigned yet
     node_details[i][j].parent.row = j;
 
@@ -94,7 +94,7 @@ void a_star_search(int grid[GRID_ROW][GRID_COL], node start, node destination) {
 
         closed_list[i][j] = true;
 
-        double g_cost_new, h_cost_new, f_cost_new;
+        int g_cost_new, h_cost_new, f_cost_new;
 
         int row_offsets[] = {-1, 1, 0, 0, -1, -1, 1, 1};
         int col_offsets[] = {0, 0, 1, -1, -1, 1, -1, 1};
@@ -108,25 +108,29 @@ void a_star_search(int grid[GRID_ROW][GRID_COL], node start, node destination) {
 
             if (is_valid(child)) {
                 if (is_destination(child, destination)) {
-                    node_details[child.row][child.col].parent.row = i; // node_details -> cellDetails -> grid
-                    node_details[child.row][child.col].parent.col = j;
-                    printf("The destination node has been found!\n");
+                    node_details[child.col][child.row].parent.row = i;
+                    node_details[child.col][child.row].parent.col = j;
+                    printf("The destination node at (%d, %d) has been found!\n", destination.row, destination.col);
                     trace_path(node_details, destination);
                     found_dest = true;
-                    free(open_list.arr);
+                    free(open_list.arr); // skal closed list ikke også free'es?
                     return;
-                } else if (!closed_list[child.row][child.col] && is_unblocked(grid, child)) {
+                } else if (!closed_list[child.col][child.row] && is_unblocked(grid, child)) {
                     g_cost_new = node_details[i][j].g_cost + move_costs[d];
                     h_cost_new = calculate_heuristic(child, destination);
                     f_cost_new = g_cost_new + h_cost_new;
 
-                    if (node_details[child.row][child.col].f_cost == FLT_MAX || node_details[child.row][child.col].f_cost > f_cost_new) {
+                    printf("(%d,%d) is not in closed list AND is unblocked\n", child.col, child.row);
+                    
+                    if (node_details[child.col][child.row].f_cost == INT_MAX || node_details[child.col][child.row].f_cost > f_cost_new) {
                         insert_min_heap(&open_list, &child);
-                        node_details[child.row][child.col].f_cost = f_cost_new;
-                        node_details[child.row][child.col].g_cost = g_cost_new;
-                        node_details[child.row][child.col].h_cost = h_cost_new;
-                        node_details[child.row][child.col].parent.row = i;
-                        node_details[child.row][child.col].parent.col = j;
+                        node_details[child.col][child.row].f_cost = f_cost_new;
+                        node_details[child.col][child.row].g_cost = g_cost_new;
+                        node_details[child.col][child.row].h_cost = h_cost_new;
+                        node_details[child.col][child.row].parent.row = i;
+                        node_details[child.col][child.row].parent.col = j;
+
+                        printf("Node: (%d,%d) with f_cost = %d\n", child.col, child.row, child.f_cost);
                     }
                 }
             }
@@ -142,7 +146,7 @@ void a_star_search(int grid[GRID_ROW][GRID_COL], node start, node destination) {
 }
 
 void a_star_test(void) {
-    int grid[GRID_ROW][GRID_COL] = {
+    int grid[GRID_COL][GRID_ROW] = {
         {1, 0, 1, 1, 1, 1, 0, 1, 1},
         {1, 1, 1, 0, 1, 1, 1, 0, 1},
         {1, 1, 1, 0, 1, 1, 0, 1, 0},

@@ -31,7 +31,6 @@ node* get_min (min_heap* heap) {
     return heap->arr[0];
 }
 
-
 // Initialising min heap structure and returns pointer to the min_heap (heap)
 min_heap* initialise_min_heap(int capacity) {
     min_heap* heap = (min_heap*) calloc (1, sizeof(min_heap));
