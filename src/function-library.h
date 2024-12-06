@@ -87,7 +87,7 @@ void add_to_open_set(min_heap* pq, node* node_to_add);
 
 node* get_and_remove_lowest_node(min_heap* pq);
 
-void add_to_closed_set(node* hash_table[][GRID_ROW], node* node_to_add);
+void add_to_closed_set(hash_table* closed_list, node* node_to_add);
 
 int is_node_in_closed_set(node* hash_table[][GRID_ROW], node* node_to_check);
 

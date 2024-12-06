@@ -93,7 +93,7 @@ void a_star_search(node* grid[GRID_COL][GRID_ROW], node start, node destination)
     node_details[i][j].parent.row = j;
 
     min_heap open_list;
-    open_list.arr = (node *)malloc(sizeof(node) * GRID_ROW * GRID_COL);
+    open_list.arr = (node **)malloc(sizeof(node) * GRID_ROW * GRID_COL);
     open_list.size = 0;
     open_list.capacity = GRID_ROW * GRID_COL;
 
@@ -107,7 +107,7 @@ void a_star_search(node* grid[GRID_COL][GRID_ROW], node start, node destination)
         i = node_cheapest->row;
         j = node_cheapest->col;
 
-        closed_list[i][j] = true;
+        //closed_list[i][j] = true;
 
         int g_cost_new, h_cost_new, f_cost_new;
 
@@ -130,7 +130,7 @@ void a_star_search(node* grid[GRID_COL][GRID_ROW], node start, node destination)
                     found_dest = true;
                     free(open_list.arr); // skal closed list ikke også free'es?
                     return;
-                } else if (!closed_list[child.col][child.row] && is_unblocked(child)) {
+                }/* else if (!closed_list[child.col][child.row] && is_unblocked(child)) {
                     g_cost_new = node_details[i][j].g_cost + move_costs[d];
                     h_cost_new = calculate_heuristic(child, destination);
                     f_cost_new = g_cost_new + h_cost_new;
@@ -147,7 +147,7 @@ void a_star_search(node* grid[GRID_COL][GRID_ROW], node start, node destination)
 
                         printf("Node: (%d,%d) with f_cost = %d\n", child.col, child.row, child.f_cost);
                     }
-                }
+                }*/
             }
         }
     }
@@ -157,7 +157,7 @@ void a_star_search(node* grid[GRID_COL][GRID_ROW], node start, node destination)
         printf("Failed to find a path to the Destination node.\n");
     }
 
-    free_min_heap(open_list.arr);
+    //free_min_heap(open_list.arr);
 }
 
 void a_star_test(void) {

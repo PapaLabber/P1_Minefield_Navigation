@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <stdlib.h>
+
 #include "../function-library.h"
 
 // Adds node to open set using min_heap (Priority que)
@@ -27,7 +29,7 @@ node* get_and_remove_lowest_node(min_heap* pq) {
 
     heapify(pq, 0);
 
-    return get_and_remove_lowest_node;
+    return lowest_f_cost_node;
 }
 
 // Add note to the closed set (obstacles)
@@ -67,8 +69,8 @@ void add_to_closed_set(hash_table* closed_list, node* node_to_add) {
         closed_list->entries->head = node_to_add;
         node_to_add->next = NULL;
     } else {
-        node_to_add->next = closed_list[hash_col][hash_row];
-        closed_list[hash_col][hash_row] = node_to_add;
+       // node_to_add->next = closed_list[hash_col][hash_row];
+        //closed_list[hash_col][hash_row] = node_to_add;
     }
 }
 
@@ -76,7 +78,7 @@ void add_to_closed_set(hash_table* closed_list, node* node_to_add) {
 int is_node_in_closed_set(node* hash_table[][GRID_ROW], node* node_to_check) {
     if(hash_table == NULL || node_to_check == NULL) {
         printf("ERROR: Hash table is full.\n");
-        return;
+        return 0;
     }
 
     int hash_col = node_to_check->col % GRID_COL;
@@ -87,7 +89,7 @@ int is_node_in_closed_set(node* hash_table[][GRID_ROW], node* node_to_check) {
         if (current->col == node_to_check->col && current->row == node_to_check->row) {
             return 1;
         }
-        current = current->next;
+        current = (node*)current->next;
     }
 
     return 0;
