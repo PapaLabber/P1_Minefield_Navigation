@@ -46,9 +46,9 @@ void insert_node(int x, int y, int width, int cost, hash_table* ht) {
         ht->entries[hash].head = new_node;
     } else {
         while (current->next != NULL) {
-            current = current->next;
+            //current = current->next;
         }
-        current->next = new_node;
+        //current->next = new_node;
     }
 }
 // Searching for node in the hash_table from (x,y) coordinates
@@ -61,7 +61,7 @@ node* find_node(int x, int y, int width, hash_table* ht) {
         if (current->col == x && current->row == y) {
             return current;
         }
-        current = current->next;
+        //current = current->next;
     }
     return NULL;
 }

@@ -19,7 +19,7 @@ typedef enum mine {
 } mine;
 
 typedef enum obstacle {
-    no_obstacle,
+    no_obstacle = 0,
     tree,
     stone,
     bush,
@@ -29,14 +29,15 @@ typedef enum obstacle {
 
 typedef struct {
     int col, row;
+    int g_cost;
 } node_parent;
 
-typedef struct {
+typedef struct node {
     int col, row;                // coordinates ---- x -> col, y -> row
-    int g_cost;                  // cost from current node to new node
+    int g_cost;                  // cost from start node to new node
     int h_cost;                  // estimated distance from current node to destination
     int f_cost;                  // sum of g_cost h_cost
-    node_parent parent;          // Pointer til forælder-node for sti-rekonstruktion
+    struct node* parent;          // Pointer til forælder-node for sti-rekonstruktion
     struct node* next;
     obstacle obstacle_type;   // obstacle type ---- no obstacle == 0
     mine mine_type;           // mine type ---- no mine == 0
@@ -93,3 +94,5 @@ int is_node_in_closed_set(node* hash_table[][GRID_ROW], node* node_to_check);
 
 unsigned int hash_function(int x, int y, int width);
 
+
+void a_star_test_eju(void);

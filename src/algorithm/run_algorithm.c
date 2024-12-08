@@ -79,8 +79,8 @@ void a_star_search(node* grid[GRID_COL][GRID_ROW], node start, node destination)
             node_details[i][j].f_cost = INT_MAX; // initial cost infinite, not looked at yet
             node_details[i][j].g_cost = INT_MAX;
             node_details[i][j].h_cost = INT_MAX;
-            node_details[i][j].parent.col = -1; // no parent assigned yet
-            node_details[i][j].parent.row = -1;
+            node_details[i][j].parent->col = -1; // no parent assigned yet
+            node_details[i][j].parent->row = -1;
         }
     }
 
@@ -89,8 +89,8 @@ void a_star_search(node* grid[GRID_COL][GRID_ROW], node start, node destination)
     node_details[i][j].f_cost = 0; // Sættes til at være distancens mellem start og slut
     node_details[i][j].g_cost = 0;
     node_details[i][j].h_cost = 0; // Sættes til at være distancens mellem start og slut
-    node_details[i][j].parent.col = i; // no parent assigned yet
-    node_details[i][j].parent.row = j;
+    node_details[i][j].parent->col = i; // no parent assigned yet
+    node_details[i][j].parent->row = j;
 
     min_heap open_list;
     open_list.arr = (node **)malloc(sizeof(node) * GRID_ROW * GRID_COL);
@@ -123,8 +123,8 @@ void a_star_search(node* grid[GRID_COL][GRID_ROW], node start, node destination)
 
             if (is_valid(child)) {
                 if (is_destination(child, destination)) {
-                    node_details[child.col][child.row].parent.row = i;
-                    node_details[child.col][child.row].parent.col = j;
+                    node_details[child.col][child.row].parent->row = i;
+                    node_details[child.col][child.row].parent->col = j;
                     printf("The destination node at (%d, %d) has been found!\n", destination.row, destination.col);
                     trace_path(node_details, destination);
                     found_dest = true;

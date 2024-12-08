@@ -33,7 +33,7 @@ node* get_min (min_heap* heap) {
 
 // Initialising min heap structure and returns pointer to the min_heap (heap)
 min_heap* initialise_min_heap(int capacity) {
-    min_heap* heap = (min_heap*) calloc (1, sizeof(min_heap));
+    min_heap* heap = (min_heap*) calloc(1, sizeof(min_heap));
     heap->arr = (node**) calloc(capacity, sizeof(node*));
     heap->size = 0;
     heap->capacity = capacity;
@@ -76,7 +76,7 @@ node* find_minimum(min_heap* heap) {
 
     // Find minimum element, at the root
     if (!heap || heap->size == 0) {
-        return heap;
+        //return heap;
     }
     // Min is always at the root and moves last element to the root
     node* min_node = get_min(heap);
