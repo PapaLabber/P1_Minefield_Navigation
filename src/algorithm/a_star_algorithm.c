@@ -176,9 +176,7 @@ void insert_heap_node_eju(heap *my_heap, node *neighbor_node) {
            my_heap->binary_tree[get_heap_parent_eju(current_index)]->row,
            my_heap->binary_tree[current_index]->col, my_heap->binary_tree[current_index]->row);
 
-    // Heapify up
-    //heapify_eju(my_heap, current_index);
-
+        // Heapify up from the newly inserted node
     while (current_index != 0 &&
            my_heap->binary_tree[get_heap_parent_eju(current_index)]->f_cost >
            my_heap->binary_tree[current_index]->f_cost) {
@@ -199,7 +197,6 @@ void insert_heap_node_eju(heap *my_heap, node *neighbor_node) {
     }
 
     // Final status after sorting
-
     printf("DEBUG: Heapify complete. Current node at index %d with f_cost=%d\n",
            current_index, my_heap->binary_tree[current_index]->f_cost);
     print_heap_binary_eju(my_heap);
@@ -215,15 +212,17 @@ node *get_min_heap(heap *my_heap) {
 }
 
 node *get_and_remove_lowest_heap_node_eju(heap *my_heap) {
-    // Get the root node, because it is the minimum
+    // Retrieving of root node, having the smallest f_cost
     node *lowest_f_cost_node = get_min_heap(my_heap);
 
+    // New root node assigned and heap size adjusted
     my_heap->binary_tree[0] = my_heap->binary_tree[my_heap->size - 1];
     my_heap->size--;
 
-    // TODO: change the heapify algorithm.
+    // Heapify top-down used because root node is deleted and new is assigned
     heapify_eju(my_heap, 0);
 
+    // Return of previous root node
     return lowest_f_cost_node;
 }
 
