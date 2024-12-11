@@ -1,5 +1,6 @@
 // PURPOSE: calculate minimum-spanning tree (MST) for christofides.c to use
 
+#include <float.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -19,78 +20,37 @@ void calculate_edge_weights(node mine_array[]) { // calculate edge weights from 
     }
 }
 
-/*
-int find_cheapest(double two_d_array[NUMBER_OF_MINES][NUMBER_OF_MINES], int runs, int from_mine, int to_mine) {
-    int cheapest = INT_MAX;
-    int list_of_visited_edges[NUMBER_OF_MINES];
-
-    for (to_mine = 0; to_mine < runs; to_mine++) { // if mine at new index is not 0 and cheaper than previous cheapest mine, reassign
-        int is_in_array = 0;
-
-        if (two_d_array[from_mine][to_mine] < cheapest && two_d_array[from_mine][to_mine] != 0)
-
-            for(int j = 0; j < sizeof(list_of_visited_edges[j]); j++) {
-                if(list_of_visited_edges[j] == to_mine)
-                    is_in_array = 1;
-            }
-
-            if (is_in_array == 0)
-                cheapest = two_d_array[from_mine][to_mine];
-    }
-
-    return cheapest;
-}
-
-void prim_algorithm(node grid[NUMBER_OF_MINES], double mine_distances[NUMBER_OF_MINES][NUMBER_OF_MINES]) {
-    // calculate edge weights
-    calculate_edge_weights(grid);
-
-    // find the cheapest edge
-    for (int from_mine = 0; from_mine < NUMBER_OF_MINES; from_mine++) {
-        for (int to_mine = 0; to_mine < NUMBER_OF_MINES; to_mine++) {
-            int cheapest_edge = find_cheapest(mine_distances, NUMBER_OF_MINES, from_mine, to_mine);
-            printf("From mine %d to mine %d: [%d] is the cheapest edge with weight [%d].\n", from_mine, to_mine, cheapest_edge, 4); // 4 = placeholder
-        }
-    }
-}
-
-*/
-
-int find_cheapest(double mine_distances[NUMBER_OF_MINES][NUMBER_OF_MINES], int number_of_visited_mines, node visited_mines[NUMBER_OF_MINES], node mines[NUMBER_OF_MINES]) {
+double find_cheapest(double mine_distances[NUMBER_OF_MINES][NUMBER_OF_MINES], int number_of_visited_mines, node visited_mines[NUMBER_OF_MINES], node mines[NUMBER_OF_MINES]) {
 
     // brug visited mines og kør den igennem da vi allerede ved at de miner der er i den er visited
 
-    int cheapest = INT_MAX;
+    double cheapest = FLT_MAX;
+    int from_mine_temp = 0;
     int temp_p = 0;
 
-    for (int from_mine = 0; from_mine < number_of_visited_mines; from_mine++) { // Decides how many times it should run
-        for (int p = 0; p < NUMBER_OF_MINES; p++) { // Checks all mines
-            int not_visited = 0;
+    for (int from_mine = 0; from_mine < number_of_visited_mines; from_mine++) { // Decide how many times it should run
+        for (int p = 0; p < NUMBER_OF_MINES; p++) { // Check all mines
+            int not_visited = 1;
 
-            for (int i = 0; i < number_of_visited_mines; i++) { // Checks if the mines is already visited
-                if (mines[p].col != visited_mines[i].col && mines[p].row != visited_mines[i].row) {
-                    not_visited = 1;
+            for (int i = 0; i < number_of_visited_mines; i++) { // Check if the mines are already visited
+                if (mines[p].col == visited_mines[i].col && mines[p].row == visited_mines[i].row) {
+                    not_visited = 0;
                 }
             }
 
             if (not_visited == 1) {
-                // double temp_dist = calculate_distance(visited_mines[from_mine], mines[p]);
-                double temp_dist = mine_distances[from_mine][p];
+                double temp_dist = calculate_distance(visited_mines[from_mine], mines[p]);
+                //double temp_dist = mine_distances[from_mine][p];
                 if (temp_dist < cheapest && temp_dist != 0) {
                     cheapest = temp_dist;
-                    /*
-                    if (number_of_visited_mines == NUMBER_OF_MINES - 1) {
-                        printf("DEBUG: accessing beyond array bounds");
-                        exit(EXIT_FAILURE);
-                    }
-                    */
-                    visited_mines[number_of_visited_mines + 1] = mines[p];
+                    visited_mines[number_of_visited_mines] = mines[p];
                     temp_p = p;
+                    from_mine_temp = from_mine;
                 }
             }
         }
     }
-
+    printf("distance = %lf, from_mine = (%d,%d), temp_p = (%d,%d).\n", cheapest, visited_mines[from_mine_temp].col, visited_mines[from_mine_temp].row, mines[temp_p].col, mines[temp_p].row);
     return cheapest;
 }
 
@@ -98,19 +58,20 @@ void prim_algorithm(node array_of_mines[NUMBER_OF_MINES]) {
     // create visited list
     int number_of_visited_mines = 0;
     node visited_mines[NUMBER_OF_MINES];
-    visited_mines[0] = array_of_mines[0];
-    int mst[NUMBER_OF_MINES];
+    visited_mines[0] = array_of_mines[0]; // add first mine to visited list
+    double mst[NUMBER_OF_MINES]; // initialize minimum-spanning tree
+    // mst[0] = visited_mines[0];
 
     // calculate distance from first mine to every other mine
     calculate_edge_weights(array_of_mines);
 
     // find the cheapest edge from first mine to another mine
 
-    for (int i = 0; i < NUMBER_OF_MINES-2; i++) {
+    for (int i = 0; i < NUMBER_OF_MINES-1; i++) {
         number_of_visited_mines++;
 
         mst[i] = find_cheapest(mine_distances, number_of_visited_mines, visited_mines, array_of_mines);
-
+        printf("mst[%d] = %lf\n", i, mst[i]);
     }
 }
 
