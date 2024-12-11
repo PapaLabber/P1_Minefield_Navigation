@@ -16,4 +16,5 @@ add_executable(project_main projekt_main.c
         algorithm/a_star_algorithm.c
         algorithm/a_star_library.h
 
+
 )
