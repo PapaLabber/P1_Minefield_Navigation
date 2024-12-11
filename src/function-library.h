@@ -1,15 +1,7 @@
 #ifndef FUNCTION_LIBRARY_H
 #define FUNCTION_LIBRARY_H
 
-#endif //FUNCTION_LIBRARY_H
-
-#define GRID_ROW 9 // # rows in the grid we'll traverse (effectively the height)
-#define GRID_COL 9 // # columns in the grid we'll traverse (effectively the width)
-
-void read_map_test();
-void parse_map_test();
-void process_map_test();
-
+// Struct definitions
 typedef enum mine {
     no_mine,
     MRUD,
@@ -27,11 +19,6 @@ typedef enum obstacle {
     deep_water
 } obstacle;
 
-typedef struct {
-    int col, row;
-    int g_cost;
-} node_parent;
-
 typedef struct node {
     int col, row;                // coordinates ---- x -> col, y -> row
     int g_cost;                  // cost from start node to new node
@@ -45,54 +32,14 @@ typedef struct node {
     int blast_radius;            // Ekstra felt til at angive risiko-niveau (f.eks. miner: højere værdi)
 } node;
 
-typedef struct min_heap {
-    node** arr;                  // Array af node pointers
-    int size;                    // Current size of heap
-    int capacity;                // Max capacity of the heap
-} min_heap;
-
-typedef struct hash_table_entry {
-    node* head;
-} hash_table_entry;
-
-typedef struct hash_table {
-    hash_table_entry* entries;
+typedef struct heap {
+    node **binary_tree;
     int size;
-} hash_table;
+    int capacity;
+} heap;
 
-int parent(int index);
-
-int lchild(int index);
-
-int rchild(int index);
-
-node* get_min (min_heap* heap);
-
-min_heap* initialise_min_heap(int capacity);
-
-void free_min_heap(min_heap* heap);
-
-min_heap* insert_min_heap(min_heap* heap, node* element);
-
-node* find_minimum(min_heap* heap);
-
-min_heap* heapify(min_heap* heap, int index);
-
-void trace_path(node node_details[GRID_ROW][GRID_COL], node destination);
-
-void a_star_test(void);
-
-hash_table* init_hash_table(int size);
-
-void add_to_open_set(min_heap* pq, node* node_to_add);
-
-node* get_and_remove_lowest_node(min_heap* pq);
-
-void add_to_closed_set(hash_table* closed_list, node* node_to_add);
-
-int is_node_in_closed_set(node* hash_table[][GRID_ROW], node* node_to_check);
-
-unsigned int hash_function(int x, int y, int width);
+// Function prototypes
+int is_out_of_bounds(int derived_col, int derived_row, int map_size_col, int map_size_row);
 
 
-void a_star_test_eju(void);
+#endif //FUNCTION_LIBRARY_H

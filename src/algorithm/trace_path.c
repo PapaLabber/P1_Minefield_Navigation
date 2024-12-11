@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include "../function-library.h"
 
+#define GRID_ROW 9
+#define GRID_COL 9
+
 void trace_path(node node_details[GRID_ROW][GRID_COL], node destination) {
     int row = destination.row;
     int col = destination.col;

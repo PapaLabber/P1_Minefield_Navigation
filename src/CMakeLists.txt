@@ -10,12 +10,10 @@ add_executable(project_main projekt_main.c
         map_processing/read_map.c
         map_processing/parse_map.c
         map_processing/process_map.c
-        algorithm/run_algorithm.c
-        algorithm/min_heap.c
+        algorithm/heap.c
         algorithm/hash_table.c
-        algorithm/handling_sets.c
         algorithm/trace_path.c
-        algorithm/nearest_neighbor.c
         algorithm/a_star_algorithm.c
+        algorithm/a_star_library.h
 
 )

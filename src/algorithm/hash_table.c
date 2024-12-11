@@ -1,67 +1,69 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdint.h>
 #include "../function-library.h"
+#include "../algorithm/a_star_library.h"
+#include <stdlib.h>
+#include <stdio.h>
 
-// Initialising hash_table
-hash_table* init_hash_table(int size) {
-
-    hash_table* ht = malloc(sizeof(hash_table)); // Dynamic allocating memory for room for the table
-    if(ht == NULL) {
-        printf("ERROR: Out of memory.\n");
-        exit(EXIT_FAILURE);
-    }
-    ht->entries = calloc(size, sizeof(hash_table_entry)); // Allocating memory with calloc for entries and sets to NULL
-    ht->size = size;
-    return ht;
+int hash_function(int col, int row, int map_size_col) {
+    return (row * map_size_col + col);
 }
 
-// Size of the grid and hash_function
-unsigned int hash_function(int x, int y, int width) {
-    return y * width + x;
+hash_node* init_hash_table(int map_size_col, int map_size_row) {
+    int hash_size = map_size_col * map_size_row;
+    hash_node* closed_list = calloc(hash_size, sizeof(hash_node));
+    if(closed_list == NULL) {
+        printf("ERROR: Could not allocate memory for hash table\n");
+        exit(EXIT_FAILURE);
+    }
+    return closed_list;
 }
 
-// Inserting a new node in the hashtable and calculating hashvalue to place node in hash_table_entry
-void insert_node(int x, int y, int width, int cost, hash_table* ht) {
-    node* new_node = malloc(sizeof(node)); // Dynamic allocating memory for new_node
-    if (new_node == NULL) {
-        printf("ERROR: Out of memory.\n");
+void insert_hash_table(hash_node* hash_table, int map_size_col, node* new_entry) {
+    int index = hash_function(new_entry->col, new_entry->row, map_size_col);
+
+    hash_node* new_hash = malloc(sizeof(hash_node));
+    if (new_hash == NULL) {
+        printf("ERROR: Could not allocate memory for hash node\n");
         exit(EXIT_FAILURE);
     }
 
-    new_node->col = x;
-    new_node->row = y;
-    new_node->g_cost = cost;
-    new_node->next = NULL;
+    new_hash->entry = new_entry;
+    new_hash->next = NULL;
 
-    // Calculating hash value
-    int hash = hash_function(x, y, width) % ht->size;
-
-    // Find correct bucket
-    node* current = ht->entries[hash].head;
-
-    // Separate chaining
-    if (current == NULL) {
-        ht->entries[hash].head = new_node;
+    // No collision, insert directly
+    if (hash_table[index].entry == NULL && hash_table[index].next == NULL) {
+        hash_table[index].entry = new_entry;
+        hash_table[index].next = NULL;
+        free(new_hash);
     } else {
-        while (current->next != NULL) {
-            //current = current->next;
+        // Handle collision with chaining
+        new_hash->next = hash_table[index].next;
+        hash_table[index].next = new_hash;
+    }
+
+    printf("\n");
+    for (int i = 0; i < map_size_col * map_size_col; i++) {
+    if (hash_table[i].entry != NULL) {
+            printf("Closed_list holds at index[%d]: (%d, %d)\n",
+                   i, hash_table[i].entry->col, hash_table[i].entry->row);
         }
-        //current->next = new_node;
     }
 }
-// Searching for node in the hash_table from (x,y) coordinates
-node* find_node(int x, int y, int width, hash_table* ht) {
 
-    int hash = hash_function(x, y, width) % ht->size;
-
-    node* current = ht->entries[hash].head;
-    while (current != NULL) {
-        if (current->col == x && current->row == y) {
-            return current;
-        }
-        //current = current->next;
+int is_node_in_closed_set(hash_node* hash_table, node* node_to_check, int map_size_col) {
+    if(hash_table == NULL || node_to_check == NULL) {
+        printf("ERROR: Hash table is full.\n");
+        exit(EXIT_FAILURE);
     }
-    return NULL;
+    int index = hash_function(node_to_check->col, node_to_check->row, map_size_col);
+
+    hash_node* current = &hash_table[index];
+
+    while (current != NULL && current->entry != NULL) {
+        if (current->entry->col == node_to_check->col && current->entry->row == node_to_check->row) {
+            return 1;
+        }
+        current = current->next;
+    }
+
+    return 0;
 }
