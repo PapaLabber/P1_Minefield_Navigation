@@ -6,7 +6,7 @@
 #define GRID_ROW 9 // # rows in the grid we'll traverse (effectively the height)
 #define GRID_COL 9 // # columns in the grid we'll traverse (effectively the width)
 
-#define NUMBER_OF_MINES 10
+#define NUMBER_OF_MINES 11
 
 void read_map_test();
 void parse_map_test();
@@ -34,13 +34,18 @@ typedef struct {
     int g_cost;
 } node_parent;
 
+
+
+
 typedef struct node {
     int col, row;                // coordinates ---- x -> col, y -> row
     int g_cost;                  // cost from start node to new node
     int h_cost;                  // estimated distance from current node to destination
     int f_cost;                  // sum of g_cost h_cost
-    struct node* parent;          // Pointer til forælder-node for sti-rekonstruktion
+    struct node* parent;    // Pointer til forælder-node for sti-rekonstruktion
+    struct node* previous_mine;  // pointer til forældre minen
     struct node* next;
+    int mine_child;              // Hvor mange childs minen har
     obstacle obstacle_type;   // obstacle type ---- no obstacle == 0
     mine mine_type;           // mine type ---- no mine == 0
     // int elevation;            // height of node ---- nice to have
@@ -107,9 +112,9 @@ void a_star_test_eju(void);
 
 double calculate_distance(node current_node, node destination_node);
 
-void calculate_edge_weights(node mine_array[]);
+//void calculate_edge_weights(node mine_array[]);
 
-double find_cheapest(double mine_distances[NUMBER_OF_MINES][NUMBER_OF_MINES], int number_of_visited_mines, node visited_mines[NUMBER_OF_MINES], node mines[NUMBER_OF_MINES]);
+void find_cheapest(/*double mine_distances[NUMBER_OF_MINES][NUMBER_OF_MINES], */int number_of_visited_mines, node visited_mines[NUMBER_OF_MINES], node mines[NUMBER_OF_MINES]);
 
 void prim_algorithm(node array_of_mines[NUMBER_OF_MINES]);
 
