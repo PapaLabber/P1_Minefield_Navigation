@@ -9,12 +9,11 @@ add_executable(project_main projekt_main.c
         map_creation/create_file.c
         map_processing/read_map.c
         map_processing/parse_map.c
-        map_processing/process_map.c
         algorithm/heap.c
         algorithm/hash_table.c
         algorithm/trace_path.c
         algorithm/a_star_algorithm.c
         algorithm/a_star_library.h
-        post_process/post_process.c
+        map_processing/post_process.c
 
 )

@@ -32,7 +32,7 @@ node** parse_map(const int rows, const int columns, const node* read_map_array, 
         }
     }
 
-    //print for sjov skyld
+    //print for sjovs skyld
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < columns; j++) {
             printf("(%d, %2d, %2d)  ", matrix[i][j].obstacle_type, matrix[i][j].terrain, matrix[i][j].mine_type);
