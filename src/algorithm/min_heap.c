@@ -18,7 +18,7 @@ int lchild(int index) {
 }
 
 int rchild(int index) {
-    // Index of left child node
+    // Index of right child node
     return 2 * index + 2;
 }
 

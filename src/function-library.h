@@ -6,6 +6,8 @@
 #define GRID_ROW 9 // # rows in the grid we'll traverse (effectively the height)
 #define GRID_COL 9 // # columns in the grid we'll traverse (effectively the width)
 
+#define NUMBER_OF_MINES 10
+
 void read_map_test();
 void parse_map_test();
 void process_map_test();
@@ -60,6 +62,11 @@ typedef struct hash_table {
     int size;
 } hash_table;
 
+typedef struct edge {
+    node source, destination;
+    double weight;
+} edge;
+
 int parent(int index);
 
 int lchild(int index);
@@ -96,3 +103,14 @@ unsigned int hash_function(int x, int y, int width);
 
 
 void a_star_test_eju(void);
+
+
+double calculate_distance(node current_node, node destination_node);
+
+void calculate_edge_weights(node mine_array[]);
+
+double find_cheapest(double mine_distances[NUMBER_OF_MINES][NUMBER_OF_MINES], int number_of_visited_mines, node visited_mines[NUMBER_OF_MINES], node mines[NUMBER_OF_MINES]);
+
+void prim_algorithm(node array_of_mines[NUMBER_OF_MINES]);
+
+void prim_test(void);

@@ -17,5 +17,7 @@ add_executable(project_main projekt_main.c
         algorithm/trace_path.c
         algorithm/nearest_neighbor.c
         algorithm/a_star_algorithm.c
+        tsp_solution/prim.c
+        tsp_solution/christofides.c
 
 )
