@@ -28,7 +28,7 @@ typedef struct node {
     obstacle obstacle_type;
     mine mine_type;
     int terrain;
-    int blast_radius;
+    int in_blast_zone;
 } node;
 
 typedef struct heap {
