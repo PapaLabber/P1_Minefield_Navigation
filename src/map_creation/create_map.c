@@ -1,4 +1,4 @@
-#include "../function-library.h"
+#include "../general-library.h"
 #include <stdio.h>
 
 int main() {

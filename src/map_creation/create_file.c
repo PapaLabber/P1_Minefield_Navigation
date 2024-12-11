@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include "../function-library.h"
+#include "../general-library.h"
 
 
 void create_file() {

@@ -20,16 +20,15 @@ typedef enum obstacle {
 } obstacle;
 
 typedef struct node {
-    int col, row;                // coordinates ---- x -> col, y -> row
-    int g_cost;                  // cost from start node to new node
-    int h_cost;                  // estimated distance from current node to destination
-    int f_cost;                  // sum of g_cost h_cost
-    struct node* parent;          // Pointer til forælder-node for sti-rekonstruktion
-    struct node* next;
-    obstacle obstacle_type;   // obstacle type ---- no obstacle == 0
-    mine mine_type;           // mine type ---- no mine == 0
-    // int elevation;            // height of node ---- nice to have
-    int blast_radius;            // Ekstra felt til at angive risiko-niveau (f.eks. miner: højere værdi)
+    int col, row;
+    int g_cost;
+    int h_cost;
+    int f_cost;
+    struct node* parent;
+    obstacle obstacle_type;
+    mine mine_type;
+    int terrain;
+    int blast_radius;
 } node;
 
 typedef struct heap {

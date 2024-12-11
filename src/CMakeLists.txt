@@ -1,7 +1,7 @@
 
 add_executable(project_main projekt_main.c
-        function-library.c
-        function-library.h
+        general-library.c
+        general-library.h
         map_creation/map_initializer.c
         map_creation/map_input.c
         map_creation/map_create_objects.c

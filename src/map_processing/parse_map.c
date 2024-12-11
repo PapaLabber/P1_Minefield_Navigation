@@ -1,17 +1,17 @@
-#include "../function-library.h"
+#include "../general-library.h"
 #include <stdio.h>
 #include <stdlib.h>
 
 
-cell** parse_map(const int rows, const int columns, const cell* read_map_array, const int num_cells) {
+node** parse_map(const int rows, const int columns, const node* read_map_array, const int num_cells) {
     //allokere plads til matrixen
-    cell **matrix = (cell **) malloc(rows * sizeof(cell *)); //allokere plads til rows
+    node **matrix = (node **) malloc(rows * sizeof(node *)); //allokere plads til rows
      if(matrix == NULL) {
         printf("Allocation error in matrix\n");
         exit(EXIT_FAILURE);
     }
     for (int i = 0; i < rows; i++) {
-        matrix[i] = (cell *) malloc(columns * sizeof(cell)); //allokere plads til coloumns
+        matrix[i] = (node *) malloc(columns * sizeof(node)); //allokere plads til columns
         if (matrix[i] == NULL) {
             printf("Allocation error in 2d allocation index:[%d]\n", i);
             exit(EXIT_FAILURE);
@@ -35,7 +35,7 @@ cell** parse_map(const int rows, const int columns, const cell* read_map_array, 
     //print for sjov skyld
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < columns; j++) {
-            printf("(%d, %2d, %2d)  ", matrix[i][j].obstacle, matrix[i][j].terrain, matrix[i][j].mine);
+            printf("(%d, %2d, %2d)  ", matrix[i][j].obstacle_type, matrix[i][j].terrain, matrix[i][j].mine_type);
         }
         printf("\n");
     }

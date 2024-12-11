@@ -18,6 +18,8 @@ int get_total_g_cost(int target_g_cost, node *previous_node);
 
 void a_star_algorithm(node **input_map, int map_size_col, int map_size_row, node *start_node, node *dest_node);
 
+void a_star_test_eju(void); // temporary test function
+
 // Function prototypes (Heap/Priority queue)
 heap *init_heap(const int capacity);
 

@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "../function-library.h"
+#include "../general-library.h"
 
 #define GRID_ROW 9
 #define GRID_COL 9

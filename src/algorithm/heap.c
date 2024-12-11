@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
-#include "../function-library.h"
+#include "../general-library.h"
 #include "../algorithm/a_star_library.h"
 
 int get_heap_parent(int index) {
