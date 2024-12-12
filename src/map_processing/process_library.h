@@ -14,6 +14,7 @@ node* list_mines(int map_rows, int map_columns, node **matrix, int *mine_arr_ind
 
 void add_danger_zone(int map_rows, int map_columns, node **matrix, node *list_of_mines, int *mine_arr_index);
 
-node **process_map(int map_rows, int map_columns, node **matrix);
+node* process_map(int map_rows, int map_columns, node **matrix);
+
 
 #endif //PROCESS_LIBRARY_H

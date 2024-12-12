@@ -7,7 +7,6 @@ node *list_mines(int map_rows, int map_columns, node **matrix, int *mine_arr_ind
     *mine_arr_index = 0;
     node *mine_array = malloc(((*mine_arr_index) + 1) * sizeof(node));
 
-
     for (int row = 0; row < map_rows; row++) {
         for (int column = 0; column < map_columns; column++) {
             if (matrix[row][column].mine_type != no_mine) {
@@ -21,38 +20,7 @@ node *list_mines(int map_rows, int map_columns, node **matrix, int *mine_arr_ind
             }
         }
     }
-    /*
-    int allocated_size = 10; // Initial allocation size
-    *mine_arr_index = 0;
 
-    node *mine_array = malloc(allocated_size * sizeof(node)); // Initial allocation
-    if (mine_array == NULL) {
-        // Handle allocation failure
-        exit(EXIT_FAILURE);
-    }
-
-
-    for (int row = 0; row < map_rows; row++) {
-        for (int column = 0; column < map_columns; column++) {
-            if (matrix[row][column].mine_type != no_mine) {
-                if (*mine_arr_index >= allocated_size) {
-                    allocated_size *= 2; // Double the allocation size
-                    node *temp = realloc(mine_array, allocated_size * sizeof(node));
-                    if (temp == NULL) {
-                        // Handle realloc failure
-                        free(mine_array); // Free original memory to avoid a leak
-                        mine_array = NULL;
-                        exit(EXIT_FAILURE);
-                    }
-                    mine_array = temp;
-                }
-
-                (mine_array)[*mine_arr_index] = matrix[row][column];
-                (*mine_arr_index)++;
-            }
-        }
-    }
-*/
     DEBUG_MSG("DEBUG:\n");
     for (int i = 0; i < *mine_arr_index; i++) {
         printf("(%d,%d) ", mine_array[i].row, mine_array[i].col);
@@ -99,7 +67,7 @@ void add_danger_zone(int map_rows, int map_columns, node **matrix, node *list_of
     }
 }
 
-void process_map(int map_rows, int map_columns, node **matrix) {
+node* process_map(int map_rows, int map_columns, node **matrix) {
     int mine_arr_index; // TSP gruppen skal bruge dette
 
     DEBUG_MSG("DEBUG: Initial matrix:\n");
@@ -117,5 +85,5 @@ void process_map(int map_rows, int map_columns, node **matrix) {
     add_danger_zone(map_rows, map_columns, matrix, list_of_mines, &mine_arr_index);
 
 
-    free(list_of_mines); // Skal nok slettes
+    return list_of_mines;
 }

@@ -1,43 +1,44 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "../general-library.h"
 
-
-
-
-
-
-
-void trace_path(node** input_map, node* destination, int map_rows, int map_cols) {
-    int row = destination->row;
-    int col = destination->col;
-
-    // Stack to store the path temporarily for printing (no need to store full path)
-    node temp_path[map_rows * map_cols];
-    int temp_path_size = 0;
-
-    // Backtrack from destination to start
-    while (!(input_map[row][col].parent->row == row && input_map[row][col].parent->col == col)) {
-        // Store current position in temp_path
-        temp_path[temp_path_size].row = row;
-        temp_path[temp_path_size].col = col;
-        temp_path_size++;
-
-        // Move to the parent cell (this is the backtracking step)
-        int temp_row = input_map[row][col].parent->row;  // Get parent row
-        int temp_col = input_map[row][col].parent->col;  // Get parent column
-        row = temp_row;  // Update current row to parent's row
-        col = temp_col;  // Update current col to parent's column
+node **trace_path(node *dest_node) {
+    if (dest_node == NULL) {
+        printf("Destination node is NULL.\n");
+        return NULL;
+    }
+    node **path_list = malloc(sizeof(node *));
+    if (path_list == NULL) {
+        printf("path_list allocation failed");
+        exit(EXIT_FAILURE);
     }
 
-    // Add the starting cell to the temporary path
-    temp_path[temp_path_size].row = row;
-    temp_path[temp_path_size].col = col;
-    temp_path_size++;
+    node *temp_node = dest_node;
+    int i = 0;
 
-    // Print the reconstructed path from destination to start (in reverse order)
-    printf("\nThe path is: ");
-    for (int i = temp_path_size - 1; i >= 0; i--) {
-        printf("-> (%d, %d) ", temp_path[i].row, temp_path[i].col);
+    // Traverse the path
+    while (temp_node != NULL) {
+        path_list[i] = temp_node;
+
+        // Prepare for the next node
+        temp_node = temp_node->parent;
+        i++;
+
+        // Reallocate memory for the next node
+        node **new_path_list = realloc(path_list, (i + 1) * sizeof(node *));
+        if (new_path_list == NULL) {
+            free(path_list);
+            printf("Reallocation failed\n");
+            exit(EXIT_FAILURE);
+        }
+        path_list = new_path_list;
+    }
+
+    printf("DEBUG: show me da way\n");
+    for (int j = i - 1; j >= 0; j--) {
+        printf("-> (%d, %d) ", path_list[j]->col, path_list[j]->row);
     }
     printf("\n");
+
+    return path_list;
 }

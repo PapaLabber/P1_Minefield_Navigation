@@ -40,8 +40,6 @@ typedef struct heap {
 // Function prototypes
 int is_out_of_bounds(int derived_col, int derived_row, int map_size_col, int map_size_row);
 
-void trace_path(node** input_map, node* destination, int map_rows, int map_cols);
-
 // Debug kontrol
 #ifndef DEBUG
 #define DEBUG 0

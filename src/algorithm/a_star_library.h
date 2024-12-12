@@ -53,5 +53,8 @@ void insert_hash_table(hash_node *hash_table, int map_size_col, node *new_entry)
 
 int is_node_in_closed_set(hash_node *hash_table, node *node_to_check, int map_size_col);
 
+//Function prototype (Trace path)
+node** trace_path(node* dest_node);
+
 
 #endif //A_STAR_LIBRARY_H

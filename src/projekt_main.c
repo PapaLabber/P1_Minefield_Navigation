@@ -11,20 +11,22 @@ int main(void) {
 
     node** matrix = parse_map(row, col, read_map_array, num_nodes);
 
-    process_map(row, col, matrix);
+    node* list_of_mines = process_map(row, col, matrix);
 
-    node *start_node = &matrix[9][9];
-    node *dest_node = &matrix[0][0];
+    node *start_node = &matrix[0][0];
+    node *dest_node = &matrix[9][9];
 
     a_star_algorithm(matrix, col, row, start_node, dest_node);
 
-    trace_path(matrix, dest_node, row, col);
-    // a_star_test_eju();
+    node** traced_path = trace_path(dest_node);
 
     //This is needed at somepoint
     for (int i = 0; i < row; i++) {
         free(matrix[i]);
     }
     free(matrix);
+    free(list_of_mines);
+    free(traced_path);
+
     return 0;
 }
