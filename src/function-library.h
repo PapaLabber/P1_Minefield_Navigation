@@ -114,9 +114,9 @@ double calculate_distance(node current_node, node destination_node);
 
 //void calculate_edge_weights(node mine_array[]);
 
-void find_cheapest(/*double mine_distances[NUMBER_OF_MINES][NUMBER_OF_MINES], */int number_of_visited_mines, node visited_mines[NUMBER_OF_MINES], node mines[NUMBER_OF_MINES]);
+void find_cheapest(int number_of_visited_mines, node* visited_mines, node* mines);
 
-node* prim_algorithm(node* array_of_mines);
+void prim_algorithm(node* array_of_mines);
 
 void prim_test(void);
 

@@ -11,7 +11,7 @@ double calculate_distance(node current_node, node destination_node) {
 } // sqrt((x_1 - x_2)^2 + (y_1 - y_2)^2) // euclidean distance
 
 
-void find_cheapest(int number_of_visited_mines, node visited_mines[NUMBER_OF_MINES], node mines[NUMBER_OF_MINES]) {
+void find_cheapest(int number_of_visited_mines, node* visited_mines, node* mines) {
 
     // brug visited mines og kør den igennem da vi allerede ved at de miner der er i den er visited
 
@@ -42,38 +42,38 @@ void find_cheapest(int number_of_visited_mines, node visited_mines[NUMBER_OF_MIN
         }
     }
 
-
-
     visited_mines[from_mine_temp].mine_child ++;
 
     printf("Number: %d mine found\n", number_of_visited_mines);
 
-    printf("mine = (%d,%d) has: %d child(ren)\n", visited_mines[from_mine_temp].col, visited_mines[from_mine_temp].row, visited_mines[from_mine_temp].mine_child);
+    printf("mine = (%d,%d) has: %d child(ren)\n", visited_mines[from_mine_temp].col, visited_mines[from_mine_temp].row,
+        visited_mines[from_mine_temp].mine_child);
 
-    printf("distance = %lf, from_mine = (%d,%d), temp_p = (%d,%d).\n", cheapest, visited_mines[from_mine_temp].col, visited_mines[from_mine_temp].row, mines[temp_p].col, mines[temp_p].row);
+    printf("distance = %lf, from_mine = (%d,%d), temp_p = (%d,%d).\n", cheapest, visited_mines[from_mine_temp].col,
+        visited_mines[from_mine_temp].row, mines[temp_p].col, mines[temp_p].row);
 
     mines[temp_p].previous_mine = &visited_mines[from_mine_temp];
     visited_mines[number_of_visited_mines].previous_mine = &visited_mines[from_mine_temp];
 
 
-    printf("parent to mine (%d, %d) is (%d, %d)\n",mines[temp_p].col, mines[temp_p].row, mines[temp_p].previous_mine->col, mines[temp_p].previous_mine->row);
+    printf("parent to mine (%d, %d) is (%d, %d)\n",mines[temp_p].col, mines[temp_p].row,
+        mines[temp_p].previous_mine->col, mines[temp_p].previous_mine->row);
 }
 
-node* prim_algorithm(node* array_of_mines) {
+void prim_algorithm(node* array_of_mines) {
     // create visited list
-    int number_of_visited_mines = 0;
-    node visited_mines[NUMBER_OF_MINES];
+
+    node* visited_mines = (node*)malloc(NUMBER_OF_MINES * sizeof(node));
+
     // sets all children to be 0
     for (int i = 0; i < NUMBER_OF_MINES; i++) {
         array_of_mines[i].mine_child = 0;
-        array_of_mines[i].previous_mine = NULL;
+        //array_of_mines[i].previous_mine = NULL;
     }
-
 
     visited_mines[0] = array_of_mines[0]; // add first mine to visited list
 
-    for (int i = 0; i < NUMBER_OF_MINES - 1; i++) {
-        number_of_visited_mines++;
+    for (int number_of_visited_mines = 1; number_of_visited_mines < NUMBER_OF_MINES; number_of_visited_mines++) {
         find_cheapest(number_of_visited_mines, visited_mines, array_of_mines);
     }
 
@@ -81,12 +81,14 @@ node* prim_algorithm(node* array_of_mines) {
         array_of_mines[i] = visited_mines[i];
     }
 
-
-    printf("\n\n");
-
+    printf("\n\nDette er indenfor prim\n");
     for (int i = 1; i < NUMBER_OF_MINES; i++) {
-        printf("(%d, %d) ", array_of_mines[i].previous_mine->col, array_of_mines[i].previous_mine->row);
+        printf("(%d %d) ", array_of_mines[i].previous_mine->col, array_of_mines[i].previous_mine->row);
     }
+
+    free(visited_mines); // Skal måske laves et andet sted???
+
+
     /*
 
     printf("\n");
@@ -100,5 +102,4 @@ node* prim_algorithm(node* array_of_mines) {
     }
     */
 
-    return array_of_mines;
 }
