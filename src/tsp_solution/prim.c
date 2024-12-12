@@ -10,18 +10,8 @@ double calculate_distance(node current_node, node destination_node) {
     return sqrt(pow((current_node.row - destination_node.row),2) + pow((current_node.col - destination_node.col),2));
 } // sqrt((x_1 - x_2)^2 + (y_1 - y_2)^2) // euclidean distance
 
-//double mine_distances[NUMBER_OF_MINES][NUMBER_OF_MINES];
 
-/*
-void calculate_edge_weights(node mine_array[]) { // calculate edge weights from each mine to each other mine
-    for (int from_mine = 0; from_mine < NUMBER_OF_MINES; from_mine++) {
-        for (int to_mine = 0; to_mine < NUMBER_OF_MINES; to_mine++) {
-            mine_distances[from_mine][to_mine] = calculate_distance(mine_array[from_mine], mine_array[to_mine]);
-        }
-    }
-}
-*/
-void find_cheapest(/*double mine_distances[NUMBER_OF_MINES][NUMBER_OF_MINES], */int number_of_visited_mines, node visited_mines[NUMBER_OF_MINES], node mines[NUMBER_OF_MINES]) {
+void find_cheapest(int number_of_visited_mines, node visited_mines[NUMBER_OF_MINES], node mines[NUMBER_OF_MINES]) {
 
     // brug visited mines og kør den igennem da vi allerede ved at de miner der er i den er visited
 
@@ -69,29 +59,38 @@ void find_cheapest(/*double mine_distances[NUMBER_OF_MINES][NUMBER_OF_MINES], */
     printf("parent to mine (%d, %d) is (%d, %d)\n",mines[temp_p].col, mines[temp_p].row, mines[temp_p].previous_mine->col, mines[temp_p].previous_mine->row);
 }
 
-void prim_algorithm(node array_of_mines[NUMBER_OF_MINES]) {
+node* prim_algorithm(node* array_of_mines) {
     // create visited list
     int number_of_visited_mines = 0;
     node visited_mines[NUMBER_OF_MINES];
     // sets all children to be 0
     for (int i = 0; i < NUMBER_OF_MINES; i++) {
         array_of_mines[i].mine_child = 0;
+        array_of_mines[i].previous_mine = NULL;
     }
+
+
     visited_mines[0] = array_of_mines[0]; // add first mine to visited list
-    //double mst[NUMBER_OF_MINES]; // initialize minimum-spanning tree
-    // mst[0] = visited_mines[0];
-
-
-    // calculate distance from first mine to every other mine
-    //calculate_edge_weights(array_of_mines);
-
-    // find the cheapest edge from first mine to another mine
 
     for (int i = 0; i < NUMBER_OF_MINES - 1; i++) {
         number_of_visited_mines++;
-        find_cheapest(/*mine_distances, */number_of_visited_mines, visited_mines, array_of_mines);
+        find_cheapest(number_of_visited_mines, visited_mines, array_of_mines);
     }
 
+    for (int i = 0; i < NUMBER_OF_MINES; i++) {
+        array_of_mines[i] = visited_mines[i];
+    }
+
+
+    printf("\n\n");
+
+    for (int i = 1; i < NUMBER_OF_MINES; i++) {
+        printf("(%d, %d) ", array_of_mines[i].previous_mine->col, array_of_mines[i].previous_mine->row);
+    }
+    /*
+
+    printf("\n");
+    printf("\n");
     for (int i = 0; i < NUMBER_OF_MINES; i++) {
         printf("mine = (%d,%d) has: %d child(ren)\n", visited_mines[i].col, visited_mines[i].row, visited_mines[i].mine_child);
     }
@@ -99,19 +98,7 @@ void prim_algorithm(node array_of_mines[NUMBER_OF_MINES]) {
     for (int i = 1; i < NUMBER_OF_MINES; i++) {
         printf("parent to mine (%d, %d) is (%d, %d)\n",visited_mines[i].col, visited_mines[i].row, visited_mines[i].previous_mine->col, visited_mines[i].previous_mine->row);
     }
-}
+    */
 
-void prim_test(void) {
-    node mine_1, mine_2, mine_3, mine_4, mine_5, mine_6, mine_7, mine_8, mine_9, mine_10,mine_31;
-    mine_1.row = 0,mine_2.row = 2, mine_3.row = 5, mine_4.row = 1, mine_5.row = 2, mine_6.row = 4, mine_7.row = 7, mine_8.row = 1, mine_9.row = 8, mine_10.row = 0,  mine_31.row = 4;
-    mine_1.col = 0,mine_2.col = 3, mine_3.col = 6, mine_4.col = 6, mine_5.col = 8, mine_6.col = 5, mine_7.col = 5, mine_8.col = 11, mine_9.col = 2, mine_10.col = 1, mine_31.col = 0;
-
-
-    node mines[NUMBER_OF_MINES] = {
-        mine_1, mine_2, mine_3, mine_4, mine_5, mine_6, mine_7, mine_8, mine_9, mine_10, mine_31
-    };
-
-    prim_algorithm(mines);
-
-    printf("prim.c works\n");
+    return array_of_mines;
 }

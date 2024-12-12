@@ -42,12 +42,12 @@ typedef struct node {
     int g_cost;                  // cost from start node to new node
     int h_cost;                  // estimated distance from current node to destination
     int f_cost;                  // sum of g_cost h_cost
-    struct node* parent;    // Pointer til forælder-node for sti-rekonstruktion
+    struct node* parent;         // Pointer til forælder-node for sti-rekonstruktion
     struct node* previous_mine;  // pointer til forældre minen
     struct node* next;
     int mine_child;              // Hvor mange childs minen har
-    obstacle obstacle_type;   // obstacle type ---- no obstacle == 0
-    mine mine_type;           // mine type ---- no mine == 0
+    obstacle obstacle_type;      // obstacle type ---- no obstacle == 0
+    mine mine_type;              // mine type ---- no mine == 0
     // int elevation;            // height of node ---- nice to have
     int blast_radius;            // Ekstra felt til at angive risiko-niveau (f.eks. miner: højere værdi)
 } node;
@@ -116,6 +116,10 @@ double calculate_distance(node current_node, node destination_node);
 
 void find_cheapest(/*double mine_distances[NUMBER_OF_MINES][NUMBER_OF_MINES], */int number_of_visited_mines, node visited_mines[NUMBER_OF_MINES], node mines[NUMBER_OF_MINES]);
 
-void prim_algorithm(node array_of_mines[NUMBER_OF_MINES]);
+node* prim_algorithm(node* array_of_mines);
 
 void prim_test(void);
+
+
+void odd_degree_nodes(node mst[NUMBER_OF_MINES]);
+void christofides_test();

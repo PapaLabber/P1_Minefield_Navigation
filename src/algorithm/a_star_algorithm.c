@@ -2,9 +2,13 @@
 // Created by erik on 06-12-2024.
 //
 
+#include <limits.h>
+
 #include "../function-library.h"
 #include <stdlib.h>
 #include <stdio.h>
+
+
 
 // cost of moving around in a grid, and neighbor offsets.
 const int col_offsets[] = {0, 0, 1, -1, -1, 1, -1, 1};
