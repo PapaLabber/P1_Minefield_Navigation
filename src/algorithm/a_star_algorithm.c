@@ -72,7 +72,7 @@ void a_star_algorithm(node **input_map, int map_size_col, int map_size_row, node
             if (neighbor_node->obstacle_type == 0) {
                 // Calculate neighbor costs
                 int temp_h_cost = get_heuristic(neighbor_node, dest_node);
-                int temp_g_cost = move_costs[k];
+                int temp_g_cost = move_costs[k] + neighbor_node->in_blast_zone;
                 int temp_total_g_cost = get_total_g_cost(temp_g_cost, current_node);
                 int temp_f_cost = temp_h_cost + temp_total_g_cost;
                 if (temp_f_cost <= neighbor_node->f_cost) {

@@ -3,15 +3,15 @@
 #include <stdlib.h>
 
 
-node** parse_map(const int rows, const int columns, const node* read_map_array, const int num_cells) {
+node** parse_map(const int map_rows, const int map_columns, const node* read_map_array, const int num_cells) {
     //allokere plads til matrixen
-    node **matrix = (node **) malloc(rows * sizeof(node *)); //allokere plads til rows
+    node **matrix = (node **) malloc(map_rows * sizeof(node *)); //allokere plads til map_rows
      if(matrix == NULL) {
         printf("Allocation error in matrix\n");
         exit(EXIT_FAILURE);
     }
-    for (int i = 0; i < rows; i++) {
-        matrix[i] = (node *) malloc(columns * sizeof(node)); //allokere plads til columns
+    for (int i = 0; i < map_rows; i++) {
+        matrix[i] = (node *) calloc(map_columns, sizeof(node)); //allokere plads til map_columns
         if (matrix[i] == NULL) {
             printf("Allocation error in 2d allocation index:[%d]\n", i);
             exit(EXIT_FAILURE);
@@ -20,10 +20,12 @@ node** parse_map(const int rows, const int columns, const node* read_map_array, 
 
     //fylder matrixen med værdier fra read_map array
     int k = 0;
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < columns; j++) {
+    for (int row = 0; row < map_rows; row++) {
+        for (int col = 0; col < map_columns; col++) {
             if (k < num_cells) {
-                matrix[i][j] = read_map_array[k];
+                matrix[row][col] = read_map_array[k];
+                matrix[row][col].row = row;
+                matrix[row][col].col = col;
                 k++;
             } else {
                 printf("Warning: read_map_array is smaller than the required matrix size\n");
@@ -32,14 +34,15 @@ node** parse_map(const int rows, const int columns, const node* read_map_array, 
         }
     }
 
+/*
     //print for sjovs skyld
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < columns; j++) {
+    for (int i = 0; i < map_rows; i++) {
+        for (int j = 0; j < map_columns; j++) {
             printf("(%d, %2d, %2d)  ", matrix[i][j].obstacle_type, matrix[i][j].terrain, matrix[i][j].mine_type);
         }
         printf("\n");
     }
-
+*/
     return matrix;
 }
 

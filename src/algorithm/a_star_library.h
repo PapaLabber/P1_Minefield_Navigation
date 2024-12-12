@@ -1,5 +1,6 @@
 #ifndef A_STAR_LIBRARY_H
 #define A_STAR_LIBRARY_H
+#include "../general-library.h"
 
 // Struct definitions
 typedef struct {

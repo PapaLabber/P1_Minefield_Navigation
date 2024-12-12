@@ -23,7 +23,7 @@ node* read_map_from_file (const char* file, int* rows, int* columns, int* num_ce
     DEBUG_MSG("Debug - read_map: Number of cells calculated = %d\n", *num_cells);
 
     /* Allokering af hukommelse til cell array, som indeholder data fra kort */
-    node* cell_array = malloc(*num_cells * sizeof(node));
+    node* cell_array = calloc((*num_cells), sizeof(node));
 
     /* Kontrol om hukommelse til cell array kunne allokeres */
     if (cell_array == NULL) {

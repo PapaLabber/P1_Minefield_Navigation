@@ -34,7 +34,7 @@ void create_file() {
 
     for (int i = 0; i < num_data_points; i++) {
         // Generate the first and third integers
-        int x1 = rand() % 9;                  // 0 to 8
+        int x1 = (rand() % 10 == 0) ? (rand() % 8 + 1) : 0;                 // 0 to 8
         int x3 = (rand() % 10 < 1) ? 1 : 0;  // 10% chance of being 1
 
         // Generate the new value for x2, constrained by the previous value
