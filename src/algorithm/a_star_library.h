@@ -13,9 +13,9 @@ typedef struct hash_node {
 } hash_node;
 
 // Function prototypes (A* Algorithm)
-int get_heuristic(node *current_node, node *destination);
+double get_heuristic_euclidian(node *current_node, node *destination);
 
-int get_total_g_cost(int target_g_cost, node *previous_node);
+double get_total_g_cost(double target_g_cost, node *previous_node);
 
 void a_star_algorithm(node **input_map, int map_size_col, int map_size_row, node *start_node, node *dest_node);
 

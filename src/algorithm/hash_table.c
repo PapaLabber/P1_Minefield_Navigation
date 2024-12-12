@@ -44,7 +44,7 @@ void insert_hash_table(hash_node* hash_table, int map_size_col, node* new_entry)
     for (int i = 0; i < map_size_col * map_size_col; i++) {
     if (hash_table[i].entry != NULL) {
             printf("Closed_list holds at index[%d]: (%d, %d)\n",
-                   i, hash_table[i].entry->col, hash_table[i].entry->row);
+                   i, hash_table[i].entry->row, hash_table[i].entry->col);
         }
     }
 }

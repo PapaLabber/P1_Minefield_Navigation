@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 /* Implementering af funktion som læser kort data fra fil og gemmer det i et array af structs */
-node* read_map_from_file (const char* file, int* rows, int* columns, int* num_cells) {
+node* read_map_from_file (const char* file, int* rows, int* columns, int* num_nodes) {
     /* Først åbnes filen i læse mode */
     FILE* local_file = fopen(file, "r");
 
@@ -18,58 +18,58 @@ node* read_map_from_file (const char* file, int* rows, int* columns, int* num_ce
     fscanf(local_file, "%d %d", rows, columns);
     DEBUG_MSG("Debug - read_map: Read rows = %d, columns = %d\n", *rows, *columns);
 
-    /* Udregning af total antal celler */
-    *num_cells = *rows * *columns;
-    DEBUG_MSG("Debug - read_map: Number of cells calculated = %d\n", *num_cells);
+    /* Udregning af total antal nodes */
+    *num_nodes = *rows * *columns;
+    DEBUG_MSG("Debug - read_map: Number of nodes calculated = %d\n", *num_nodes);
 
-    /* Allokering af hukommelse til cell array, som indeholder data fra kort */
-    node* cell_array = calloc((*num_cells), sizeof(node));
+    /* Allokering af hukommelse til node array, som indeholder data fra kort */
+    node* node_array = calloc((*num_nodes), sizeof(node));
 
-    /* Kontrol om hukommelse til cell array kunne allokeres */
-    if (cell_array == NULL) {
-        printf("Error - read_map: Memory allocation for cell array failed...\n<");
+    /* Kontrol om hukommelse til node array kunne allokeres */
+    if (node_array == NULL) {
+        printf("Error - read_map: Memory allocation for node array failed...\n<");
         exit (EXIT_FAILURE);
     }
 
-    /* Indlæsning af hver celle */
-    for (int i = 0; i < *num_cells; i++) {
+    /* Indlæsning af hver node */
+    for (int i = 0; i < *num_nodes; i++) {
             if (fscanf(local_file, "%d %d %d",
-                    &cell_array[i].obstacle_type,
-                    &cell_array[i].terrain,
-                    &cell_array[i].mine_type) != 3) {
-                printf("Error - read_map: Failed to read cell %d\n", i);
-                free(cell_array);
+                    &node_array[i].obstacle_type,
+                    &node_array[i].terrain,
+                    &node_array[i].mine_type) != 3) {
+                printf("Error - read_map: Failed to read node %d\n", i);
+                free(node_array);
                 fclose(local_file);
                 exit (EXIT_FAILURE);
             }
-            DEBUG_MSG("Debug - read_map: cell_array[%d] = (%d, %d, %d)\n",
-                i, cell_array[i].obstacle_type, cell_array[i].terrain, cell_array[i].mine_type);
+            DEBUG_MSG("Debug - read_map: node_array[%d] = (%d, %d, %d)\n",
+                i, node_array[i].obstacle_type, node_array[i].terrain, node_array[i].mine_type);
     }
 
     /* Til slut lukkes filen, og den tomme matrix returneres fra funktionen */
     fclose(local_file);
     DEBUG_MSG("Debug - read_map: File closed successfully\n");
-    return cell_array;
+    return node_array;
 }
 
 void read_map_test() {
-    int rows, columns, num_cells;
+    int rows, columns, num_nodes;
 
     /* Kald af read_map_from_file funktionen */
-    node* cell_array = read_map_from_file("map.txt", &rows, &columns, &num_cells);
+    node* node_array = read_map_from_file("map.txt", &rows, &columns, &num_nodes);
 
-    /* Tjek af dimensioner og antal celler */
-    printf("Test/read_map - Dimensions: rows = %d, columns = %d, num_cells = %d\n",
-        rows, columns, num_cells);
+    /* Tjek af dimensioner og antal nodes */
+    printf("Test/read_map - Dimensions: rows = %d, columns = %d, num_nodes = %d\n",
+        rows, columns, num_nodes);
 
-    /* Verificering af data i hver celle */
-    for (int i = 0; i < num_cells; i++) {
-        printf("Test/read_map - Cell array[%d] = (%d, %d, %d)\n",
-            i, cell_array[i].obstacle_type, cell_array[i].terrain, cell_array[i].mine_type);
+    /* Verificering af data i hver node */
+    for (int i = 0; i < num_nodes; i++) {
+        printf("Test/read_map - node array[%d] = (%d, %d, %d)\n",
+            i, node_array[i].obstacle_type, node_array[i].terrain, node_array[i].mine_type);
     }
 
     /* Frigørelse af allokeret hukommelse */
-    free(cell_array);
-    printf("Test/read_map - Memory of cell array freed successfully\n");
+    free(node_array);
+    printf("Test/read_map - Memory of node array freed successfully\n");
 }
 

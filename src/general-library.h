@@ -21,9 +21,9 @@ typedef enum obstacle {
 
 typedef struct node {
     int col, row;
-    int g_cost;
-    int h_cost;
-    int f_cost;
+    double g_cost;
+    double h_cost;
+    double f_cost;
     struct node* parent;
     obstacle obstacle_type;
     mine mine_type;
@@ -40,9 +40,11 @@ typedef struct heap {
 // Function prototypes
 int is_out_of_bounds(int derived_col, int derived_row, int map_size_col, int map_size_row);
 
+void trace_path(node** input_map, node* destination, int map_rows, int map_cols);
+
 // Debug kontrol
 #ifndef DEBUG
-#define DEBUG 1
+#define DEBUG 0
 #endif
 
 #if DEBUG
@@ -53,8 +55,8 @@ int is_out_of_bounds(int derived_col, int derived_row, int map_size_col, int map
 
 
 // Funktion prototyper
-node* read_map_from_file (const char* file, int* rows, int* columns, int* num_cells);
-node** parse_map(const int rows, const int columns, const node* read_map_array, const int num_cells);
+node* read_map_from_file (const char* file, int* rows, int* columns, int* num_nodes);
+node** parse_map(const int rows, const int columns, const node* read_map_array, const int num_nodes);
 
 // Extra prototyper
 void create_file();

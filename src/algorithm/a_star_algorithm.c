@@ -12,7 +12,7 @@
 // cost of moving around in a grid, and neighbor offsets.
 const int col_offsets[] = {0, 0, 1, -1, -1, 1, -1, 1};
 const int row_offsets[] = {-1, 1, 0, 0, -1, -1, 1, 1};
-const int move_costs[] = {1, 1, 1, 1, 2, 2, 2, 2};
+const double move_costs[] = {1, 1, 1, 1, sqrt(2), sqrt(2), sqrt(2), sqrt(2)};
 
 // TODO: Move to post process
 // Temporary function that can be used in post_process after merge
@@ -28,11 +28,11 @@ int is_out_of_bounds(int derived_col, int derived_row, int map_size_col, int map
     return derived_col < 0 || derived_col >= map_size_col || derived_row < 0 || derived_row >= map_size_row;
 }
 
-int get_heuristic(node *current_node, node *destination) {
-    return abs(current_node->row - destination->row) + abs(current_node->col - destination->col);
+double get_heuristic_euclidian(node *current_node, node *destination) {
+    return sqrt(pow(current_node->row - destination->row, 2) + pow(current_node->col - destination->col, 2));
 }
 
-int get_total_g_cost(int target_g_cost, node *previous_node) {
+double get_total_g_cost(double target_g_cost, node *previous_node) {
     if (previous_node == NULL)
         return 0;
 
@@ -42,7 +42,7 @@ int get_total_g_cost(int target_g_cost, node *previous_node) {
 //___________________________________________________
 void a_star_algorithm(node **input_map, int map_size_col, int map_size_row, node *start_node, node *dest_node) {
     prepare_map(input_map, map_size_col, map_size_row);
-    start_node->f_cost = get_heuristic(start_node, dest_node);
+    start_node->f_cost = get_heuristic_euclidian(start_node, dest_node);
 
     // Initialization of heap
     heap *priority_queue = init_heap(map_size_col * map_size_row);
@@ -66,15 +66,15 @@ void a_star_algorithm(node **input_map, int map_size_col, int map_size_row, node
             if (is_node_in_closed_set(closed_list, neighbor_node, map_size_col))
                 continue;
 
-            printf("DEBUG: Neighbor(%d,%d) with obstacle_type(%d)\n", neighbor_node->col, neighbor_node->row,
+            DEBUG_MSG("DEBUG: Neighbor(%d,%d) with obstacle_type(%d)\n", neighbor_node->row, neighbor_node->col,
                    neighbor_node->obstacle_type);
 
             if (neighbor_node->obstacle_type == 0) {
                 // Calculate neighbor costs
-                int temp_h_cost = get_heuristic(neighbor_node, dest_node);
-                int temp_g_cost = move_costs[k] + neighbor_node->in_blast_zone;
-                int temp_total_g_cost = get_total_g_cost(temp_g_cost, current_node);
-                int temp_f_cost = temp_h_cost + temp_total_g_cost;
+                double temp_h_cost = get_heuristic_euclidian(neighbor_node, dest_node);
+                double temp_g_cost = move_costs[k] + neighbor_node->in_blast_zone;
+                double temp_total_g_cost = get_total_g_cost(temp_g_cost, current_node);
+                double temp_f_cost = temp_h_cost + temp_total_g_cost;
                 if (temp_f_cost <= neighbor_node->f_cost) {
                     neighbor_node->h_cost = temp_h_cost;
                     neighbor_node->g_cost = temp_g_cost;
@@ -82,21 +82,21 @@ void a_star_algorithm(node **input_map, int map_size_col, int map_size_row, node
                     neighbor_node->parent = current_node;
                 }
 
-                printf("DEBUG: ready to insert new node\n");
+                DEBUG_MSG("DEBUG: ready to insert new node\n");
 
                 insert_heap_node(priority_queue, neighbor_node);
-                printf("DEBUG: New node added\n\n");
+                DEBUG_MSG("DEBUG: New node added\n\n");
             }
         }
         node *cheapest_neighbor = get_and_remove_lowest_heap_node(priority_queue);
-        printf("DEBUG: Cheapest neighbor is (%d,%d)\n", cheapest_neighbor->col, cheapest_neighbor->row);
+        DEBUG_MSG("DEBUG: Cheapest neighbor is (%d,%d)\n", cheapest_neighbor->row, cheapest_neighbor->col);
 
         insert_hash_table(closed_list, map_size_col, current_node);
 
         current_node = cheapest_neighbor;
-        printf("DEBUG: new current node = (%d,%d)\n\n", current_node->col, current_node->row);
+        DEBUG_MSG("DEBUG: new current node = (%d,%d)\n\n", current_node->row, current_node->col);
     }
-    printf("DEBUG: destination reached. Current_node (%d,%d)\n", current_node->col, current_node->row);
+    printf("Destination reached. Current_node (%d,%d)\n", current_node->row, current_node->col);
 
     free(priority_queue);
     free(closed_list);

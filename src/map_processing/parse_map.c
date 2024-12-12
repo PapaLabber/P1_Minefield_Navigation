@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 
-node** parse_map(const int map_rows, const int map_columns, const node* read_map_array, const int num_cells) {
+node** parse_map(const int map_rows, const int map_columns, const node* read_map_array, const int num_nodes) {
     //allokere plads til matrixen
     node **matrix = (node **) malloc(map_rows * sizeof(node *)); //allokere plads til map_rows
      if(matrix == NULL) {
@@ -22,7 +22,7 @@ node** parse_map(const int map_rows, const int map_columns, const node* read_map
     int k = 0;
     for (int row = 0; row < map_rows; row++) {
         for (int col = 0; col < map_columns; col++) {
-            if (k < num_cells) {
+            if (k < num_nodes) {
                 matrix[row][col] = read_map_array[k];
                 matrix[row][col].row = row;
                 matrix[row][col].col = col;
