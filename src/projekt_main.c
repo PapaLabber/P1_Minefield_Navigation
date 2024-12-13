@@ -1,7 +1,8 @@
+#include <stdlib.h>
 #include "general-library.h"
 #include "../src/algorithm/a_star_library.h"
-#include <stdlib.h>
 #include "../src/map_processing/process_library.h"
+#include "../src/tsp/tsp_library.h"
 
 int main(void) {
 
@@ -20,7 +21,8 @@ int main(void) {
 
     node** traced_path = trace_path(dest_node);
 
-    //This is needed at somepoint
+    nearest_neighbor_test();
+
     for (int i = 0; i < row; i++) {
         free(matrix[i]);
     }

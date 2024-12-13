@@ -71,8 +71,8 @@ void print_heap_sideways(heap *my_heap, int index, int level) {
     print_heap_sideways(my_heap, get_rchild(index), level + 1);
 
     // Print the current node with indentation
-    printf("%*s", level * 6, ""); // Indentation based on level
-    printf("(%d,%d)-f=%.4lf\n",
+    DEBUG_MSG("%*s", level * 6, ""); // Indentation based on level
+    DEBUG_MSG("(%d,%d)-f=%.4lf\n",
            my_heap->binary_tree[index]->row,
            my_heap->binary_tree[index]->col,
            my_heap->binary_tree[index]->f_cost);
@@ -82,7 +82,7 @@ void print_heap_sideways(heap *my_heap, int index, int level) {
 }
 
 void print_heap_binary(heap *my_heap) {
-    printf("\n----- Current Heap Structure (Sideways) -----\n");
+    DEBUG_MSG("\n----- Current Heap Structure (Sideways) -----\n");
 
     if (my_heap == NULL || my_heap->size == 0) {
         printf("Heap is empty.\n");
@@ -91,7 +91,7 @@ void print_heap_binary(heap *my_heap) {
 
     print_heap_sideways(my_heap, 0, 0);
 
-    printf("-----------------------------------------------\n\n");
+    DEBUG_MSG("-----------------------------------------------\n\n");
 }
 
 node *get_min_heap(heap *my_heap) {

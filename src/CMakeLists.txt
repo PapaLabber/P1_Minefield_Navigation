@@ -12,5 +12,7 @@ add_executable(project_main projekt_main.c
         algorithm/a_star_library.h
         map_processing/post_process.c
         map_processing/process_library.h
+        tsp/nearest_neighbor.c
+        tsp/tsp_library.h
 
 )
