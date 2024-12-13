@@ -43,7 +43,7 @@ void find_cheapest(int number_of_visited_mines, node* visited_mines, node* mines
     }
 
     visited_mines[from_mine_temp].mine_child ++;
-
+    /*
     printf("Number: %d mine found\n", number_of_visited_mines);
 
     printf("mine = (%d,%d) has: %d child(ren)\n", visited_mines[from_mine_temp].col, visited_mines[from_mine_temp].row,
@@ -51,24 +51,32 @@ void find_cheapest(int number_of_visited_mines, node* visited_mines, node* mines
 
     printf("distance = %lf, from_mine = (%d,%d), temp_p = (%d,%d).\n", cheapest, visited_mines[from_mine_temp].col,
         visited_mines[from_mine_temp].row, mines[temp_p].col, mines[temp_p].row);
+        */
 
     mines[temp_p].previous_mine = &visited_mines[from_mine_temp];
     visited_mines[number_of_visited_mines].previous_mine = &visited_mines[from_mine_temp];
 
+    printf("Assigning parent (%d, %d) to child (%d, %d)\n",
+    visited_mines[from_mine_temp].col, visited_mines[from_mine_temp].row,
+    mines[temp_p].col, mines[temp_p].row);
 
+    /*
     printf("parent to mine (%d, %d) is (%d, %d)\n",mines[temp_p].col, mines[temp_p].row,
         mines[temp_p].previous_mine->col, mines[temp_p].previous_mine->row);
+        */
 }
 
 void prim_algorithm(node* array_of_mines) {
     // create visited list
 
-    node* visited_mines = (node*)malloc(NUMBER_OF_MINES * sizeof(node));
+    node* visited_mines = (node*)malloc(NUMBER_OF_MINES * sizeof(node*));
+    for (int i = 0; i < NUMBER_OF_MINES; i++) {
+        visited_mines[i].previous_mine = NULL;
+    }
 
     // sets all children to be 0
     for (int i = 0; i < NUMBER_OF_MINES; i++) {
         array_of_mines[i].mine_child = 0;
-        //array_of_mines[i].previous_mine = NULL;
     }
 
     visited_mines[0] = array_of_mines[0]; // add first mine to visited list
@@ -79,6 +87,11 @@ void prim_algorithm(node* array_of_mines) {
 
     for (int i = 0; i < NUMBER_OF_MINES; i++) {
         array_of_mines[i] = visited_mines[i];
+        if (visited_mines[i].previous_mine != NULL) {
+            // Find the index of the previous mine in visited_mines
+            int prev_index = visited_mines[i].previous_mine - visited_mines;
+            array_of_mines[i].previous_mine = &array_of_mines[prev_index];
+        }
     }
 
     printf("\n\nDette er indenfor prim\n");

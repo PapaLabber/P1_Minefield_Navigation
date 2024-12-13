@@ -6,7 +6,7 @@
 #define GRID_ROW 9 // # rows in the grid we'll traverse (effectively the height)
 #define GRID_COL 9 // # columns in the grid we'll traverse (effectively the width)
 
-#define NUMBER_OF_MINES 11
+#define NUMBER_OF_MINES 10
 
 void read_map_test();
 void parse_map_test();
@@ -45,6 +45,7 @@ typedef struct node {
     struct node* parent;         // Pointer til forælder-node for sti-rekonstruktion
     struct node* previous_mine;  // pointer til forældre minen
     struct node* next;
+    int edge_counter;
     int mine_child;              // Hvor mange childs minen har
     obstacle obstacle_type;      // obstacle type ---- no obstacle == 0
     mine mine_type;              // mine type ---- no mine == 0
