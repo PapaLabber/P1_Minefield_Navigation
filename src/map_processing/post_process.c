@@ -67,8 +67,18 @@ void add_danger_zone(int map_rows, int map_columns, node **matrix, node *list_of
     }
 }
 
+void prepare_map(node **input_map, int map_size_col, int map_size_row) {
+    for (int row = 0; row < map_size_row; row++) {
+        for (int col = 0; col < map_size_col; col++) {
+            input_map[row][col].f_cost = INT_MAX;
+        }
+    }
+}
+
 node* process_map(int map_rows, int map_columns, node **matrix) {
     int mine_arr_index; // TSP gruppen skal bruge dette
+
+    prepare_map(matrix, map_columns, map_rows);
 
     DEBUG_MSG("DEBUG: Initial matrix:\n");
     for (int rows = 0; rows < map_rows; rows++) {

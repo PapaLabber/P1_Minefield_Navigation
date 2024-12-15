@@ -16,5 +16,6 @@ void add_danger_zone(int map_rows, int map_columns, node **matrix, node *list_of
 
 node* process_map(int map_rows, int map_columns, node **matrix);
 
+void prepare_map(node **input_map, int map_size_col, int map_size_row);
 
 #endif //PROCESS_LIBRARY_H

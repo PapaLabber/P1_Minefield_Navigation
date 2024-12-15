@@ -14,15 +14,6 @@ const int col_offsets[] = {0, 0, 1, -1, -1, 1, -1, 1};
 const int row_offsets[] = {-1, 1, 0, 0, -1, -1, 1, 1};
 const double move_costs[] = {1, 1, 1, 1, sqrt(2), sqrt(2), sqrt(2), sqrt(2)};
 
-// TODO: Move to post process
-// Temporary function that can be used in post_process after merge
-void prepare_map(node **input_map, int map_size_col, int map_size_row) {
-    for (int row = 0; row < map_size_row; row++) {
-        for (int col = 0; col < map_size_col; col++) {
-            input_map[row][col].f_cost = INT_MAX;
-        }
-    }
-}
 
 int is_out_of_bounds(int derived_col, int derived_row, int map_size_col, int map_size_row) {
     return derived_col < 0 || derived_col >= map_size_col || derived_row < 0 || derived_row >= map_size_row;
@@ -41,7 +32,6 @@ double get_total_g_cost(double target_g_cost, node *previous_node) {
 
 //___________________________________________________
 void a_star_algorithm(node **input_map, int map_size_col, int map_size_row, node *start_node, node *dest_node) {
-    prepare_map(input_map, map_size_col, map_size_row);
     start_node->f_cost = get_heuristic_euclidian(start_node, dest_node);
 
     // Initialization of heap
