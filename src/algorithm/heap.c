@@ -82,7 +82,7 @@ void print_heap_sideways(heap *my_heap, int index, int level) {
 }
 
 void print_heap_binary(heap *my_heap) {
-    DEBUG_MSG("\n----- Current Heap Structure (Sideways) -----\n");
+    DEBUG_MSG("\n--- DEBUG(print_heap_binary): Current Heap Structure ---\n");
 
     if (my_heap == NULL || my_heap->size == 0) {
         printf("Heap is empty.\n");
@@ -111,12 +111,12 @@ int search_heap_node(heap *my_heap, int index, node *target_node) {
     if (my_heap->binary_tree[index] == target_node) {
         return 1;
     }
-    DEBUG_MSG("DEBUG: Checking left child of (%d,%d)-f_cost(%lf)\n", my_heap->binary_tree[index]->row,
-           my_heap->binary_tree[index]->col, my_heap->binary_tree[index]->f_cost);
+    /*DEBUG_MSG("DEBUG(search_heap_node): Checking left child of (%d,%d)-f_cost(%lf)\n", my_heap->binary_tree[index]->row,
+           my_heap->binary_tree[index]->col, my_heap->binary_tree[index]->f_cost);*/
     int l_result = search_heap_node(my_heap, get_lchild(index), target_node);
 
-    DEBUG_MSG("DEBUG: Checking right child of (%d,%d)-f_cost(%lf)\n", my_heap->binary_tree[index]->row,
-           my_heap->binary_tree[index]->col, my_heap->binary_tree[index]->f_cost);
+    /*DEBUG_MSG("DEBUG(search_heap_node): Checking right child of (%d,%d)-f_cost(%lf)\n", my_heap->binary_tree[index]->row,
+           my_heap->binary_tree[index]->col, my_heap->binary_tree[index]->f_cost);*/
     int r_result = search_heap_node(my_heap, get_rchild(index), target_node);
 
     return (l_result || r_result);
@@ -149,14 +149,14 @@ void insert_heap_node(heap *my_heap, node *neighbor_node) {
 
     // Add new element at the end
     my_heap->binary_tree[my_heap->size] = neighbor_node;
-    DEBUG_MSG("DEBUG: (Priority queue)Added new node (%d,%d) with f_cost=%lf at index %d\n", neighbor_node->row,
+    DEBUG_MSG("DEBUG(insert_heap_node): (Priority queue)Added new node (%d,%d) with f_cost=%lf at index %d\n", neighbor_node->row,
            neighbor_node->col,
            neighbor_node->f_cost, my_heap->size);
 
     int current_index = my_heap->size;
     my_heap->size++;
 
-    DEBUG_MSG("DEBUG: heap_parent_node (%d,%d), child_node (%d,%d)\n",
+    DEBUG_MSG("DEBUG(insert_heap_node): heap_parent_node (%d,%d), child_node (%d,%d)\n",
            my_heap->binary_tree[get_heap_parent(current_index)]->row,
            my_heap->binary_tree[get_heap_parent(current_index)]->col,
            my_heap->binary_tree[current_index]->row, my_heap->binary_tree[current_index]->col);
@@ -166,7 +166,7 @@ void insert_heap_node(heap *my_heap, node *neighbor_node) {
            my_heap->binary_tree[get_heap_parent(current_index)]->f_cost >
            my_heap->binary_tree[current_index]->f_cost) {
         // Print swap details
-        DEBUG_MSG("DEBUG: Swapping nodes: index %d (f_cost=%lf) and parent index %d (f_cost=%lf)\n",
+        DEBUG_MSG("DEBUG(insert_heap_node): Swapping nodes: index %d (f_cost=%lf) and parent index %d (f_cost=%lf)\n",
                current_index,
                my_heap->binary_tree[current_index]->f_cost,
                get_heap_parent(current_index),
@@ -182,7 +182,7 @@ void insert_heap_node(heap *my_heap, node *neighbor_node) {
     }
 
     // Final status after sorting
-    DEBUG_MSG("DEBUG: Heapify complete. Current node at index %d with f_cost=%lf\n",
+    DEBUG_MSG("DEBUG(insert_heap_node): Heapify complete. Current node at index %d with f_cost=%lf\n",
            current_index, my_heap->binary_tree[current_index]->f_cost);
     print_heap_binary(my_heap);
 }

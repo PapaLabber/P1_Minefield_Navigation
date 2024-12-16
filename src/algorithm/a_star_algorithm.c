@@ -56,7 +56,7 @@ void a_star_algorithm(node **input_map, int map_size_col, int map_size_row, node
             if (is_node_in_closed_set(closed_list, neighbor_node, map_size_col))
                 continue;
 
-            DEBUG_MSG("DEBUG: Neighbor(%d,%d) with obstacle_type(%d)\n", neighbor_node->row, neighbor_node->col,
+            DEBUG_MSG("DEBUG(a_star_algorithm): Neighbor(%d,%d) with obstacle_type(%d)\n", neighbor_node->row, neighbor_node->col,
                    neighbor_node->obstacle_type);
 
             if (neighbor_node->obstacle_type == 0) {
@@ -72,21 +72,21 @@ void a_star_algorithm(node **input_map, int map_size_col, int map_size_row, node
                     neighbor_node->parent = current_node;
                 }
 
-                DEBUG_MSG("DEBUG: ready to insert new node\n");
+                DEBUG_MSG("DEBUG(a_star_algorithm): ready to insert new node\n");
 
                 insert_heap_node(priority_queue, neighbor_node);
-                DEBUG_MSG("DEBUG: New node added\n\n");
+                DEBUG_MSG("DEBUG(a_star_algorithm): New node added\n\n");
             }
         }
         node *cheapest_neighbor = get_and_remove_lowest_heap_node(priority_queue);
-        DEBUG_MSG("DEBUG: Cheapest neighbor is (%d,%d)\n", cheapest_neighbor->row, cheapest_neighbor->col);
+        DEBUG_MSG("DEBUG(a_star_algorithm): Cheapest neighbor is (%d,%d)\n", cheapest_neighbor->row, cheapest_neighbor->col);
 
         insert_hash_table(closed_list, map_size_col, current_node);
 
         current_node = cheapest_neighbor;
-        DEBUG_MSG("DEBUG: new current node = (%d,%d)\n\n", current_node->row, current_node->col);
+        DEBUG_MSG("DEBUG(a_star_algorithm): new current node = (%d,%d)\n\n", current_node->row, current_node->col);
     }
-    printf("Destination reached. Current_node (%d,%d)\n", current_node->row, current_node->col);
+    DEBUG_MSG("DEBUG(a_star_algorithm): Destination reached. Current_node (%d,%d)\n", current_node->row, current_node->col);
 
     free(priority_queue);
     free(closed_list);

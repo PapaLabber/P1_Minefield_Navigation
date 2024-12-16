@@ -34,11 +34,11 @@ node **trace_path(node *dest_node) {
         path_list = new_path_list;
     }
 
-    printf("DEBUG: show me da way\n");
+    DEBUG_MSG("DEBUG(trace_path): show me da way\n");
     for (int j = i - 1; j >= 0; j--) {
-        printf("-> (%d, %d) ", path_list[j]->col, path_list[j]->row);
+        DEBUG_MSG("-> (%d, %d) ", path_list[j]->col, path_list[j]->row);
     }
-    printf("\n");
+    DEBUG_MSG("\n");
 
     return path_list;
 }

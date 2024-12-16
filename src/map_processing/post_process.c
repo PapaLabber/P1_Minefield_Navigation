@@ -3,14 +3,14 @@
 #include "../general-library.h"
 
 
-node *list_mines(int map_rows, int map_columns, node **matrix, int *mine_arr_index) {
+node *list_mines(int map_rows, int map_cols, node **matrix, int *mine_arr_index) {
     *mine_arr_index = 0;
     node *mine_array = malloc(((*mine_arr_index) + 1) * sizeof(node));
 
     for (int row = 0; row < map_rows; row++) {
-        for (int column = 0; column < map_columns; column++) {
-            if (matrix[row][column].mine_type != no_mine) {
-                mine_array[(*mine_arr_index)] = matrix[row][column];
+        for (int col = 0; col < map_cols; col++) {
+            if (matrix[row][col].mine_type != no_mine) {
+                mine_array[(*mine_arr_index)] = matrix[row][col];
                 (*mine_arr_index)++;
                 mine_array = (node*)realloc(mine_array, ((*mine_arr_index) + 1) * sizeof(node));
                 if(mine_array == NULL) {
@@ -21,16 +21,16 @@ node *list_mines(int map_rows, int map_columns, node **matrix, int *mine_arr_ind
         }
     }
 
-    DEBUG_MSG("DEBUG:\n");
+    DEBUG_MSG("DEBUG(list_mines):\n");
     for (int i = 0; i < *mine_arr_index; i++) {
-        printf("(%d,%d) ", mine_array[i].row, mine_array[i].col);
+        DEBUG_MSG("(%d,%d) ", mine_array[i].row, mine_array[i].col);
     }
-    printf("\n");
+    DEBUG_MSG("\n");
 
     return mine_array;
 }
 
-void add_danger_zone(int map_rows, int map_columns, node **matrix, node *list_of_mines, int *mine_arr_index) {
+void add_danger_zone(int map_rows, int map_cols, node **matrix, node *list_of_mines, int *mine_arr_index) {
     for (int i = 0; i < *mine_arr_index; i++) {
         int blast_radius = 0;
         switch (list_of_mines[i].mine_type) {
@@ -56,7 +56,7 @@ void add_danger_zone(int map_rows, int map_columns, node **matrix, node *list_of
         for (int row = list_of_mines[i].row - blast_radius; row <= list_of_mines[i].row + blast_radius; row++) {
             for (int col = list_of_mines[i].col - blast_radius; col <= list_of_mines[i].col + blast_radius; col++) {
                 // Check if within bounds and within Manhattan distance
-                if (row >= 0 && row < map_rows && col >= 0 && col < map_columns) {
+                if (row >= 0 && row < map_rows && col >= 0 && col < map_cols) {
                     int distance = abs(row - list_of_mines[i].row) + abs(col - list_of_mines[i].col);
                     if (distance <= blast_radius) {
                         matrix[row][col].in_blast_zone = 1;
@@ -67,32 +67,31 @@ void add_danger_zone(int map_rows, int map_columns, node **matrix, node *list_of
     }
 }
 
-void prepare_map(node **input_map, int map_size_col, int map_size_row) {
-    for (int row = 0; row < map_size_row; row++) {
-        for (int col = 0; col < map_size_col; col++) {
+void prepare_map(node **input_map, int map_cols, int map_rows) {
+    for (int row = 0; row < map_rows; row++) {
+        for (int col = 0; col < map_cols; col++) {
             input_map[row][col].f_cost = INT_MAX;
         }
     }
 }
 
-node* process_map(int map_rows, int map_columns, node **matrix) {
-    int mine_arr_index; // TSP gruppen skal bruge dette
+node* process_map(int map_rows, int map_cols, node **matrix, int* mine_arr_index) {
+    // set all f_cost to INT_MAX
+    prepare_map(matrix, map_cols, map_rows);
 
-    prepare_map(matrix, map_columns, map_rows);
-
-    DEBUG_MSG("DEBUG: Initial matrix:\n");
+    DEBUG_MSG("DEBUG(process_map): Initial matrix:\n");
     for (int rows = 0; rows < map_rows; rows++) {
-        for (int columns = 0; columns < map_columns; columns++) {
-            printf("(%d,%d,%d) ", matrix[rows][columns].mine_type, matrix[rows][columns].terrain,
-                   matrix[rows][columns].obstacle_type);
+        for (int cols = 0; cols < map_cols; cols++) {
+            DEBUG_MSG("(%d,%d,%d) ", matrix[rows][cols].mine_type, matrix[rows][cols].terrain,
+                   matrix[rows][cols].obstacle_type);
         }
-        printf("\n");
+        DEBUG_MSG("\n");
     }
 
-    node *list_of_mines = list_mines(map_rows, map_columns, matrix, &mine_arr_index);
+    node *list_of_mines = list_mines(map_rows, map_cols, matrix, mine_arr_index);
 
     // Add blast radius for all mines
-    add_danger_zone(map_rows, map_columns, matrix, list_of_mines, &mine_arr_index);
+    add_danger_zone(map_rows, map_cols, matrix, list_of_mines, mine_arr_index);
 
 
     return list_of_mines;

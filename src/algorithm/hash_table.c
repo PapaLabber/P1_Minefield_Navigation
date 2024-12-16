@@ -38,14 +38,15 @@ void insert_hash_table(hash_node* hash_table, int map_size_col, node* new_entry)
         new_hash->next = hash_table[index].next;
         hash_table[index].next = new_hash;
     }
-
-    DEBUG_MSG("\n");
+/*
+    DEBUG_MSG("DEBUG(insert_hash_table):\n");
     for (int i = 0; i < map_size_col * map_size_col; i++) {
     if (hash_table[i].entry != NULL) {
             DEBUG_MSG("Closed_list holds at index[%d]: (%d, %d)\n",
                    i, hash_table[i].entry->row, hash_table[i].entry->col);
         }
     }
+    */
 }
 
 int is_node_in_closed_set(hash_node* hash_table, node* node_to_check, int map_size_col) {
