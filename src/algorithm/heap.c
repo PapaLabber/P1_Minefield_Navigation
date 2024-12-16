@@ -71,10 +71,10 @@ void print_heap_sideways(heap *my_heap, int index, int level) {
     print_heap_sideways(my_heap, get_rchild(index), level + 1);
 
     // Print the current node with indentation
-    DEBUG_MSG("%*s", level * 6, ""); // Indentation based on level
-    DEBUG_MSG("(%d,%d)-f=%.4lf\n",
-           my_heap->binary_tree[index]->row,
+    printf("%*s", level * 6, ""); // Indentation based on level
+    printf("(%d,%d)-f=%.4lf\n",
            my_heap->binary_tree[index]->col,
+           my_heap->binary_tree[index]->row,
            my_heap->binary_tree[index]->f_cost);
 
     // Print the left child (appears at the bottom visually)
@@ -82,16 +82,16 @@ void print_heap_sideways(heap *my_heap, int index, int level) {
 }
 
 void print_heap_binary(heap *my_heap) {
-    DEBUG_MSG("\n--- DEBUG(print_heap_binary): Current Heap Structure ---\n");
+    //printf("\n--- DEBUG(print_heap_binary): Current Heap Structure ---\n");
 
     if (my_heap == NULL || my_heap->size == 0) {
         printf("Heap is empty.\n");
         return;
     }
 
-    print_heap_sideways(my_heap, 0, 0);
+    //print_heap_sideways(my_heap, 0, 0);
 
-    DEBUG_MSG("-----------------------------------------------\n\n");
+    //printf("-----------------------------------------------\n\n");
 }
 
 node *get_min_heap(heap *my_heap) {
@@ -111,12 +111,12 @@ int search_heap_node(heap *my_heap, int index, node *target_node) {
     if (my_heap->binary_tree[index] == target_node) {
         return 1;
     }
-    /*DEBUG_MSG("DEBUG(search_heap_node): Checking left child of (%d,%d)-f_cost(%lf)\n", my_heap->binary_tree[index]->row,
-           my_heap->binary_tree[index]->col, my_heap->binary_tree[index]->f_cost);*/
+    DEBUG_MSG("DEBUG(search_heap_node): Checking left child of (%d,%d)-f_cost(%lf)\n", my_heap->binary_tree[index]->row,
+           my_heap->binary_tree[index]->col, my_heap->binary_tree[index]->f_cost);
     int l_result = search_heap_node(my_heap, get_lchild(index), target_node);
 
-    /*DEBUG_MSG("DEBUG(search_heap_node): Checking right child of (%d,%d)-f_cost(%lf)\n", my_heap->binary_tree[index]->row,
-           my_heap->binary_tree[index]->col, my_heap->binary_tree[index]->f_cost);*/
+    DEBUG_MSG("DEBUG(search_heap_node): Checking right child of (%d,%d)-f_cost(%lf)\n", my_heap->binary_tree[index]->row,
+           my_heap->binary_tree[index]->col, my_heap->binary_tree[index]->f_cost);
     int r_result = search_heap_node(my_heap, get_rchild(index), target_node);
 
     return (l_result || r_result);

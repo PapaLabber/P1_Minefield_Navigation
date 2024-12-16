@@ -5,7 +5,7 @@
 // Function prototypes (A* Algorithm)
 double get_heuristic_euclidian(node *current_node, node *destination);
 
-double get_total_g_cost(double target_g_cost, node *previous_node);
+double get_total_g_cost(double target_g_cost, node *previous_node, node* start_node);
 
 void a_star_algorithm(node **input_map, int map_size_col, int map_size_row, node *start_node, node *dest_node);
 
@@ -36,7 +36,7 @@ node *get_and_remove_lowest_heap_node(heap *my_heap);
 
 
 //Function prototype (Trace path)
-node** trace_path(node* dest_node);
+node* trace_path(node* start_node, node *dest_node, int* num_nodes_traveled);
 
 
 #endif //A_STAR_LIBRARY_H

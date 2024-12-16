@@ -16,9 +16,7 @@ int find_nearest_mine(node* current, node* list_of_mines, int num_of_mines, hash
     int nearest_mine_index = 0;
 
     for (int i = 0; i < num_of_mines; i++) {
-        if (is_node_in_closed_set(visited_mines, &list_of_mines[i], map_size_col)) {
-            continue;
-        } else {
+        if (!is_node_in_closed_set(visited_mines, &list_of_mines[i], map_size_col)) {
             double dist = calculate_euclid_distance(current, &list_of_mines[i]);
             if (dist < min_distance) {
                 min_distance = dist;
@@ -34,7 +32,7 @@ int find_nearest_mine(node* current, node* list_of_mines, int num_of_mines, hash
 tsp_node* plan_route(node* start_node, node* list_of_mines, int num_of_mines, int map_size_col, int map_size_row) {
 
     hash_node* visited_mines = init_hash_table(map_size_col, map_size_row);
-    tsp_node* path_array = calloc(num_of_mines, sizeof(tsp_node));
+    tsp_node* path_array = calloc(num_of_mines + 2, sizeof(tsp_node));
     if (path_array == NULL) {
         printf("Allocation of path_array failed\n");
         exit(EXIT_FAILURE);
@@ -43,24 +41,35 @@ tsp_node* plan_route(node* start_node, node* list_of_mines, int num_of_mines, in
     insert_hash_table(visited_mines, map_size_col, start_node);
 
     node* current = start_node;
-    for (int i = 0; i < num_of_mines; i++) {
-        // Marker minen som besøgt
-        insert_hash_table(visited_mines, map_size_col, current);
-
+    path_array[0].mine = current;
+    for (int i = 1; i < num_of_mines+1; i++) {
         int nearest_mine_index = find_nearest_mine(current, list_of_mines, num_of_mines, visited_mines, map_size_col);
-
-        path_array[i].mine = current;
-        path_array[i].dist_to_next = calculate_euclid_distance(current, &list_of_mines[nearest_mine_index]);
 
         // Opdater det nuværende punkt
         current = &list_of_mines[nearest_mine_index];
+
+        path_array[i].mine = current;
+
+        // Hvis den sidste mine, mål vej til start
+        if (i < num_of_mines)
+            path_array[i].dist_to_next = calculate_euclid_distance(current, &list_of_mines[nearest_mine_index]);
+        else
+            path_array[i].dist_to_next = calculate_euclid_distance(current, start_node);
+
+        // Marker minen som besøgt
+        insert_hash_table(visited_mines, map_size_col, current);
     }
+
+    // Tilføj en vej tilbage til startpunktet
+    path_array[num_of_mines+1].mine = start_node;
+    path_array[num_of_mines+1].dist_to_next = 0;
 
     free(visited_mines);
 
     return path_array;
 }
 
+//---------------------------------------------------------------
 
 void nearest_neighbor_test() {
     node* list_of_mines = malloc(NUMBER_OF_MINES * sizeof(node));

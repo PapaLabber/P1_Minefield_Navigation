@@ -23,11 +23,14 @@ double get_heuristic_euclidian(node *current_node, node *destination) {
     return sqrt(pow(current_node->row - destination->row, 2) + pow(current_node->col - destination->col, 2));
 }
 
-double get_total_g_cost(double target_g_cost, node *previous_node) {
+double get_total_g_cost(double target_g_cost, node *previous_node, node* start_node) {
     if (previous_node == NULL)
         return 0;
 
-    return target_g_cost + get_total_g_cost(previous_node->g_cost, previous_node->parent);
+    if(previous_node == start_node)
+        return target_g_cost;
+
+    return target_g_cost + get_total_g_cost(previous_node->g_cost, previous_node->parent, start_node);
 }
 
 //___________________________________________________
@@ -56,14 +59,11 @@ void a_star_algorithm(node **input_map, int map_size_col, int map_size_row, node
             if (is_node_in_closed_set(closed_list, neighbor_node, map_size_col))
                 continue;
 
-            DEBUG_MSG("DEBUG(a_star_algorithm): Neighbor(%d,%d) with obstacle_type(%d)\n", neighbor_node->row, neighbor_node->col,
-                   neighbor_node->obstacle_type);
-
             if (neighbor_node->obstacle_type == 0) {
                 // Calculate neighbor costs
                 double temp_h_cost = get_heuristic_euclidian(neighbor_node, dest_node);
                 double temp_g_cost = move_costs[k] + neighbor_node->in_blast_zone;
-                double temp_total_g_cost = get_total_g_cost(temp_g_cost, current_node);
+                double temp_total_g_cost = get_total_g_cost(temp_g_cost, current_node, start_node);
                 double temp_f_cost = temp_h_cost + temp_total_g_cost;
                 if (temp_f_cost <= neighbor_node->f_cost) {
                     neighbor_node->h_cost = temp_h_cost;
@@ -72,21 +72,18 @@ void a_star_algorithm(node **input_map, int map_size_col, int map_size_row, node
                     neighbor_node->parent = current_node;
                 }
 
-                DEBUG_MSG("DEBUG(a_star_algorithm): ready to insert new node\n");
-
                 insert_heap_node(priority_queue, neighbor_node);
-                DEBUG_MSG("DEBUG(a_star_algorithm): New node added\n\n");
             }
         }
         node *cheapest_neighbor = get_and_remove_lowest_heap_node(priority_queue);
-        DEBUG_MSG("DEBUG(a_star_algorithm): Cheapest neighbor is (%d,%d)\n", cheapest_neighbor->row, cheapest_neighbor->col);
+        //printf("DEBUG(a_star_algorithm): Cheapest neighbor is (%d,%d)\n", cheapest_neighbor->col, cheapest_neighbor->row);
 
         insert_hash_table(closed_list, map_size_col, current_node);
 
         current_node = cheapest_neighbor;
-        DEBUG_MSG("DEBUG(a_star_algorithm): new current node = (%d,%d)\n\n", current_node->row, current_node->col);
+        //printf("DEBUG(a_star_algorithm): new current node = (%d,%d)\n\n", current_node->col, current_node->row);
     }
-    DEBUG_MSG("DEBUG(a_star_algorithm): Destination reached. Current_node (%d,%d)\n", current_node->row, current_node->col);
+    printf("DEBUG(a_star_algorithm): Destination reached. Current_node (%d,%d)\n", current_node->col, current_node->row);
 
     free(priority_queue);
     free(closed_list);
