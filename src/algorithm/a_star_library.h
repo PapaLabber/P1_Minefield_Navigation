@@ -12,7 +12,7 @@ void a_star_algorithm(node **input_map, int map_size_col, int map_size_row, node
 void a_star_test_eju(void); // temporary test function
 
 // Function prototypes (Heap/Priority queue)
-heap *init_heap(const int capacity);
+heap *init_heap(int capacity);
 
 int get_heap_parent(int index);
 
@@ -36,7 +36,9 @@ node *get_and_remove_lowest_heap_node(heap *my_heap);
 
 
 //Function prototype (Trace path)
-node* trace_path(node* start_node, node *dest_node, int* num_nodes_traveled);
+node* trace_path(node* start_node, node *dest_node, int* num_nodes_traveled, int* local_traced_path_index);
+
+node* total_path(node* local_traced_path, node* total_traced_path, int* total_path_index, int local_traced_path_size);
 
 
 #endif //A_STAR_LIBRARY_H

@@ -16,7 +16,7 @@ int get_rchild(int index) {
     return 2 * index + 2;
 }
 
-heap *init_heap(const int capacity) {
+heap *init_heap(int capacity) {
     heap *my_heap = malloc(sizeof(heap));
     if (my_heap == NULL) {
         printf("Error: Could not allocate memory for heap.\n");
